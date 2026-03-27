@@ -296,9 +296,16 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
 /* === BIG PLAY BUTTON === */
 .big-play-ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity var(--ease);z-index:3;pointer-events:none;}
 .vcard:hover .big-play-ov{opacity:1;}
-.big-play-ov .bpc{width:54px;height:54px;border-radius:50%;background:rgba(220,0,0,.88);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(0,0,0,.4);transform:scale(.85);transition:transform var(--ease);}
+.big-play-ov .bpc{width:54px;height:54px;border-radius:50%;background:rgba(220,0,0,.88);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(0,0,0,.4);transform:scale(.85);transition:transform var(--ease);pointer-events:all;cursor:pointer;}
 .vcard:hover .big-play-ov .bpc{transform:scale(1);}
 .big-play-ov .bpc svg{width:22px;height:22px;fill:#fff;margin-inline-start:3px;}
+/* Modal open button on card */
+.va-btn.modal-btn{background:rgba(0,0,0,.7);}
+.card-play-hint{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:6px;opacity:0;transition:opacity var(--ease);z-index:4;pointer-events:none;}
+.vcard:hover .card-play-hint{opacity:1;}
+.cph-btn{background:rgba(0,0,0,.75);color:#fff;border:none;border-radius:16px;padding:5px 11px;font-size:11px;font-weight:600;font-family:'Rubik',sans-serif;cursor:pointer;display:flex;align-items:center;gap:5px;pointer-events:all;backdrop-filter:blur(4px);transition:background var(--ease);}
+.cph-btn:hover{background:rgba(0,0,0,.92);}
+.cph-btn svg{width:13px;height:13px;fill:currentColor;}
 
 /* === CHANNEL GRID (search results) === */
 .ch-grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:10px;}
@@ -583,6 +590,8 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   setInterval(refreshFollowedChannels, 5 * 60 * 1000);
+  // Fetch shorts recommendations in background
+  fetchShortsRecommendations();
 
   document.addEventListener('click', e => {
     const p = document.getElementById('notif-panel');
@@ -1218,11 +1227,16 @@ function renderAll() {
   if (q) { renderSearch(ct); return; }
 
   if (section === 'all') {
+    // Filter out shorts from regular feed
+    const isShortLike = v => v.isShort === true;
+
     if (followed.size > 0) {
       const fv = [];
       for (const ch of followed) {
         if (blockedChannels.includes(ch)) continue;
-        (chMap[ch] || []).map(id => vids.find(v => v.id === id)).filter(v => v && !blockedVids.includes(v.id)).forEach(v => fv.push(v));
+        (chMap[ch] || []).map(id => vids.find(v => v.id === id))
+          .filter(v => v && !blockedVids.includes(v.id) && !isShortLike(v))
+          .forEach(v => fv.push(v));
       }
       if (fv.length) {
         if (newIds.length) {
@@ -1231,14 +1245,37 @@ function renderAll() {
           b.innerHTML = `<svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg><span>יש <strong>${newIds.length} סרטונים חדשים</strong> מהערוצים שאתה עוקב!</span>`;
           ct.appendChild(b);
         }
-        ct.appendChild(mkSec('מהערוצים שלך', fv, '<path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>', '#3ea6ff', false, null, newIds));
+        // Show only latest 6 from followed channels in a scrollable row
+        const fvLatest = fv.slice(0, 8);
+        const secF = mkSec('חדש מהערוצים שלך', fvLatest, '<path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>', '#3ea6ff', true, null, newIds);
+        ct.appendChild(secF);
       }
     }
-    const allRec = getRec().map(id => vids.find(v => v.id === id)).filter(v => v && !blockedVids.includes(v.id) && !blockedChannels.includes(v.channel));
-    if (allRec.length) ct.appendChild(mkSec(Object.keys(chWatches).length > 0 ? 'מומלצים עבורך' : 'מומלצים', allRec, '<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>', '#ffd93d', false, null, newIds));
+
+    // Recommended section — top 8, no shorts
+    const allRec = getRec().map(id => vids.find(v => v.id === id))
+      .filter(v => v && !blockedVids.includes(v.id) && !blockedChannels.includes(v.channel) && !isShortLike(v))
+      .slice(0, 8);
+    if (allRec.length) {
+      const secR = mkSec(Object.keys(chWatches).length > 0 ? 'מומלצים עבורך' : 'מומלצים', allRec, '<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>', '#ffd93d', true, null, newIds);
+      ct.appendChild(secR);
+    }
+
+    // Mini Shorts row on homepage (4 shorts only)
+    const homeShorts = shortsVids.filter(v => !blockedVids.includes(v.id) && !blockedChannels.includes(v.channel)).slice(0, 6);
+    if (homeShorts.length) {
+      const sSec = document.createElement('div'); sSec.className = 'section';
+      sSec.innerHTML = `<div class="sec-hdr"><div class="sec-title"><div class="sec-ico" style="background:#ff000022;color:#ff0000"><svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.84 1.55V6.79a4.85 4.85 0 01-1.07-.1z"/></svg></div>Shorts בשבילך <button onclick="setSection('shorts',document.getElementById('n-shorts'))" style="font-size:11px;color:var(--blue);background:none;border:none;cursor:pointer;font-family:Rubik,sans-serif;margin-right:6px">הצג עוד →</button></div></div>`;
+      const row = document.createElement('div'); row.className = 'shorts-row';
+      homeShorts.forEach((v,i) => {
+        const el = document.createElement('div'); el.className = 'short-card'; el.style.animationDelay=(i*20)+'ms';
+        el.innerHTML=`<div class="short-thumb"><img src="${v.thumb}" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${v.id}/default.jpg'" alt="${x(v.title)}"><div class="splay"><div class="splay-c"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div><div class="short-badge">Shorts</div></div><div class="short-info"><div class="short-title">${x(v.title)}</div><div class="short-ch">${x(v.channel)}</div></div>`;
+        el.onclick=()=>openModal(v); row.appendChild(el);
+      });
+      sSec.appendChild(row); ct.appendChild(sSec);
+    }
 
     if (!ct.children.length) {
-      // No content at all — prompt user
       const empty = document.createElement('div');
       empty.className = 'empty';
       empty.innerHTML = `<div class="eico"><svg viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6zm12-3c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2s10 4.48 10 10z"/></svg></div><h3>ברוך הבא ל-MyTube</h3><p>חפש ערוצים ועקוב אחריהם לקבל תכנים מותאמים אישית</p>`;
@@ -1443,7 +1480,10 @@ function mkCard(v, delay, isNew = false) {
     <div class="vthumb">
       <img src="${v.thumb}" alt="${x(v.title)}" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${v.id}/default.jpg'">
       <div class="vhover"></div>
-      <div class="big-play-ov"><div class="bpc"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <div class="big-play-ov"><div class="bpc" title="הפעל כאן"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+      <div class="card-play-hint">
+        <button class="cph-btn cph-modal" title="פתח בחלונית"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> פתח</button>
+      </div>
       <div class="v-actions">
         <button class="va-btn ext-btn" title="פתח ביוטיוב"><svg viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg></button>
         <button class="va-btn liked-btn${liked ? ' on' : ''}" data-id="${v.id}" title="אהבתי"><svg viewBox="0 0 24 24"><path d="${liked ? HEART_FULL : HEART_OUT}"/></svg></button>
@@ -1461,7 +1501,12 @@ function mkCard(v, delay, isNew = false) {
     </div>`;
 
   const thumbEl = el.querySelector('.vthumb');
-  el.querySelector('.big-play-ov').addEventListener('click', e => { e.stopPropagation(); openModal(v); });
+  // Big centered play circle → play inline in card
+  el.querySelector('.big-play-ov .bpc').addEventListener('click', e => { e.stopPropagation(); playInCard(v, thumbEl); });
+  // Bottom hint "open" button → open modal popup
+  el.querySelector('.cph-modal').addEventListener('click', e => { e.stopPropagation(); openModal(v); });
+  // Clicking the thumb area itself (not the circles) → open modal
+  thumbEl.addEventListener('click', e => { if (e.target === thumbEl || e.target.tagName === 'IMG') openModal(v); });
   el.querySelector('.ext-btn').addEventListener('click', e => { e.stopPropagation(); openYT(v); });
   el.querySelector('.liked-btn').addEventListener('click', e => { e.stopPropagation(); toggleLike(v.id, el.querySelector('.liked-btn')); });
   el.querySelector('.vtitle').addEventListener('click', () => openModal(v));
@@ -1508,11 +1553,11 @@ function buildSBChannels() {
 
 // ===== NAVIGATION =====
 function filterChannel(ch) { channelFilter = ch; q = ''; document.getElementById('search-input').value = ''; document.querySelectorAll('.chip').forEach(c => c.classList.remove('on')); document.querySelectorAll('.nitem').forEach(n => n.classList.remove('on')); buildSBChannels(); renderAll(); }
-function setSection(sec, el) { section = sec; channelFilter = ''; q = ''; document.getElementById('search-input').value = ''; document.querySelectorAll('.nitem').forEach(n => n.classList.remove('on')); el.classList.add('on'); syncChips(sec); renderAll(); }
+function setSection(sec, el) { section = sec; channelFilter = ''; q = ''; document.getElementById('search-input').value = ''; document.querySelectorAll('.nitem').forEach(n => n.classList.remove('on')); el.classList.add('on'); syncChips(sec); buildSBChannels(); renderAll(); }
 function chip(btn, sec) { section = sec; channelFilter = ''; q = ''; document.getElementById('search-input').value = ''; document.querySelectorAll('.chip').forEach(c => c.classList.remove('on')); btn.classList.add('on'); document.querySelectorAll('.nitem').forEach(n => n.classList.remove('on')); const n = document.getElementById('n-' + sec); if (n) n.classList.add('on'); renderAll(); }
 function syncChips(sec) { document.querySelectorAll('.chip').forEach(c => { c.classList.toggle('on', (c.getAttribute('onclick') || '').includes(`'${sec}'`)); }); }
 function toggleSB() { sbOpen = !sbOpen; document.getElementById('sidebar').classList.toggle('col', !sbOpen); document.getElementById('main').classList.toggle('col', !sbOpen); }
-function goHome(e) { e.preventDefault(); section = 'all'; channelFilter = ''; q = ''; document.getElementById('search-input').value = ''; document.querySelectorAll('.chip').forEach(c => c.classList.remove('on')); document.querySelector('.chip').classList.add('on'); document.querySelectorAll('.nitem').forEach(n => n.classList.remove('on')); document.getElementById('n-all').classList.add('on'); renderAll(); }
+function goHome(e) { e.preventDefault(); section = 'all'; channelFilter = ''; q = ''; document.getElementById('search-input').value = ''; document.querySelectorAll('.chip').forEach(c => c.classList.remove('on')); document.querySelector('.chip').classList.add('on'); document.querySelectorAll('.nitem').forEach(n => n.classList.remove('on')); document.getElementById('n-all').classList.add('on'); buildSBChannels(); renderAll(); }
 
 // ===== SEARCH =====
 let searchTimer;
@@ -1562,14 +1607,50 @@ function playAllLiked() {
 }
 
 // ===== SHORTS =====
+let shortsVids = JSON.parse(localStorage.getItem('mshortvids') || '[]');
+let shortsFetchTime = parseInt(localStorage.getItem('mshortft') || '0');
+const SHORTS_COOLDOWN = 30 * 60 * 1000; // 30 min
+
+async function fetchShortsRecommendations() {
+  if (Date.now() - shortsFetchTime < SHORTS_COOLDOWN) return;
+  // Build query from followed channels + watch history
+  const topChannels = Object.entries(chWatches).sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>e[0]);
+  const queries = [];
+  if (topChannels.length) queries.push(`${topChannels[0]} shorts`);
+  if (topChannels.length > 1) queries.push(`${topChannels[1]} shorts`);
+  queries.push('שורטסים ישראל', '#shorts ישראל');
+  const seen = new Set(shortsVids.map(v => v.id));
+  let fetched = [];
+  for (const q of queries.slice(0, 2)) {
+    try {
+      const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&q=${encodeURIComponent(q)}&type=video&videoDuration=short&regionCode=${REGION}&relevanceLanguage=${LANG}&key=${API_KEY}`;
+      const r = await fetch(url); const d = await r.json();
+      if (!d.error && d.items) {
+        for (const item of d.items) {
+          if (!item.id?.videoId || seen.has(item.id.videoId)) continue;
+          // Only include likely shorts (title or description has #shorts or duration hint)
+          fetched.push({ id: item.id.videoId, title: item.snippet.title, channel: item.snippet.channelTitle, channelId: item.snippet.channelId, thumb: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.medium?.url, desc: item.snippet.description, publishedAt: item.snippet.publishedAt, isShort: true });
+          seen.add(item.id.videoId);
+        }
+      }
+    } catch(e) {}
+  }
+  if (fetched.length) {
+    shortsVids = [...fetched, ...shortsVids].slice(0, 60);
+    shortsFetchTime = Date.now();
+    localStorage.setItem('mshortvids', JSON.stringify(shortsVids));
+    localStorage.setItem('mshortft', String(shortsFetchTime));
+  }
+}
+
 function renderShortsSection(ct) {
-  const all = vids.filter(v => !blockedVids.includes(v.id) && !blockedChannels.includes(v.channel));
-  const followed_vids = all.filter(v => followed.has(v.channel));
-  const other_vids    = all.filter(v => !followed.has(v.channel));
-  const combined = [...followed_vids, ...other_vids].slice(0, 30);
-  if (!combined.length) { ct.appendChild(mkEmpty('אין Shorts זמינים', 'עקוב אחרי ערוצים')); return; }
+  const combined = shortsVids.filter(v => !blockedVids.includes(v.id) && !blockedChannels.includes(v.channel));
+  const fetchNeeded = Date.now() - shortsFetchTime > SHORTS_COOLDOWN;
+  if (!combined.length && !fetchNeeded) { ct.appendChild(mkEmpty('אין Shorts זמינים', 'מרענן...')); fetchShortsRecommendations().then(() => renderShortsSection(ct)); return; }
+  if (fetchNeeded) fetchShortsRecommendations().then(() => { if (section === 'shorts') renderShortsSection(document.getElementById('content')); });
+  if (!combined.length) { const ind = document.createElement('div'); ind.className = 'fetch-indicator'; ind.innerHTML = `<svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg> טוען Shorts...`; ct.appendChild(ind); return; }
   const sec = document.createElement('div'); sec.className = 'section';
-  sec.innerHTML = `<div class="sec-hdr"><div class="sec-title"><div class="sec-ico" style="background:#ff000022;color:#ff0000"><svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.84 1.55V6.79a4.85 4.85 0 01-1.07-.1z"/></svg></div>Shorts מומלצים</div></div>`;
+  sec.innerHTML = `<div class="sec-hdr"><div class="sec-title"><div class="sec-ico" style="background:#ff000022;color:#ff0000"><svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.84 1.55V6.79a4.85 4.85 0 01-1.07-.1z"/></svg></div>Shorts מומלצים בשבילך</div><span class="sec-count">${combined.length} שורטסים</span></div>`;
   const row = document.createElement('div'); row.className = 'shorts-row';
   combined.forEach((v, i) => {
     const el = document.createElement('div'); el.className = 'short-card'; el.style.animationDelay = (i*20)+'ms';
