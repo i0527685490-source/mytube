@@ -412,7 +412,53 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
 .short-close-btn{position:absolute;top:6px;left:6px;z-index:11;background:rgba(0,0,0,.7);border:none;color:#fff;border-radius:50%;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .short-close-btn svg{width:14px;height:14px;fill:currentColor;}
 
-/* NOTIF BADGE */
+/* SETTINGS PANEL */
+#settings-panel{position:fixed;top:0;left:0;width:300px;height:100vh;background:var(--bg2);border-right:1px solid var(--bg4);z-index:400;transform:translateX(-100%);transition:transform .25s cubic-bezier(.4,0,.2,1);overflow-y:auto;direction:rtl;box-shadow:4px 0 24px var(--shadow);}
+#settings-panel.open{transform:translateX(0);}
+.sp-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--bg4);position:sticky;top:0;background:var(--bg2);z-index:2;}
+.sp-hdr h3{font-size:15px;font-weight:700;}
+.sp-close{background:none;border:none;cursor:pointer;color:var(--txt);padding:4px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:background var(--ease);}
+.sp-close:hover{background:var(--bg3);}
+.sp-body{padding:8px 0 24px;}
+.sp-section{font-size:10px;font-weight:700;color:var(--txt3);text-transform:uppercase;letter-spacing:.8px;padding:14px 18px 6px;}
+.sp-row{display:flex;align-items:center;justify-content:space-between;padding:10px 18px;font-size:13px;gap:10px;}
+.sp-toggle-row{padding:8px 18px;}
+.sp-btn{background:var(--bg3);border:1px solid var(--bg4);color:var(--txt);border-radius:8px;padding:5px 14px;font-size:12px;font-family:'Rubik',sans-serif;cursor:pointer;transition:background var(--ease);white-space:nowrap;}
+.sp-btn:hover{background:var(--bg4);}
+.sp-btn.red{background:rgba(255,0,0,.1);border-color:rgba(255,0,0,.2);color:var(--red);}
+.sp-btn.red:hover{background:rgba(255,0,0,.2);}
+.sp-sel{background:var(--bg3);border:1px solid var(--bg4);color:var(--txt);border-radius:8px;padding:5px 10px;font-size:12px;font-family:'Rubik',sans-serif;cursor:pointer;outline:none;}
+.sp-switch{position:relative;display:inline-block;width:38px;height:22px;flex-shrink:0;}
+.sp-switch input{opacity:0;width:0;height:0;}
+.sp-slider{position:absolute;inset:0;background:var(--bg4);border-radius:22px;transition:.2s;cursor:pointer;}
+.sp-slider:before{content:'';position:absolute;width:16px;height:16px;right:3px;bottom:3px;background:#fff;border-radius:50%;transition:.2s;}
+.sp-switch input:checked + .sp-slider{background:var(--red);}
+.sp-switch input:checked + .sp-slider:before{right:calc(100% - 19px);}
+.sp-info{font-size:11px;color:var(--txt3);padding:4px 18px;line-height:1.6;}
+.sp-overlay{display:none;position:fixed;inset:0;z-index:399;background:transparent;}
+.sp-overlay.show{display:block;}
+
+/* PERSONAL AREA */
+.personal-area{direction:rtl;}
+.pa-hdr{display:flex;align-items:center;gap:14px;padding:0 0 20px;border-bottom:1px solid var(--border);margin-bottom:20px;}
+.pa-av{width:70px;height:70px;border-radius:50%;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;}
+.pa-av img{width:100%;height:100%;object-fit:cover;}
+.pa-name{font-size:20px;font-weight:700;}
+.pa-sub{font-size:13px;color:var(--txt3);margin-top:4px;}
+.pa-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
+.pa-btn{display:flex;align-items:center;gap:8px;border:none;border-radius:20px;padding:10px 20px;font-size:13px;font-family:'Rubik',sans-serif;cursor:pointer;font-weight:600;transition:all var(--ease);}
+.pa-btn.primary{background:var(--red);color:#fff;}
+.pa-btn.primary:hover{background:var(--red2);}
+.pa-btn.secondary{background:var(--bg3);color:var(--txt);border:1px solid var(--bg4);}
+.pa-btn.secondary:hover{background:var(--bg4);}
+.pa-btn svg{width:16px;height:16px;fill:currentColor;}
+.pa-section{font-size:13px;font-weight:600;color:var(--txt3);margin:20px 0 10px;text-transform:uppercase;letter-spacing:.5px;font-size:11px;}
+.pa-stat-row{display:flex;gap:16px;margin-bottom:20px;}
+.pa-stat{background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 18px;flex:1;text-align:center;}
+.pa-stat-num{font-size:22px;font-weight:700;color:var(--txt);}
+.pa-stat-lbl{font-size:11px;color:var(--txt3);margin-top:3px;}
+
+@media(max-width:760px){#settings-panel{width:100%;border-right:none;border-left:1px solid var(--bg4);}}
 .bell-wrap{position:relative;}
 .notif-badge{position:absolute;top:5px;right:5px;width:16px;height:16px;border-radius:50%;background:var(--red);font-size:10px;font-weight:700;display:none;align-items:center;justify-content:center;color:#fff;pointer-events:none;border:2px solid var(--bg);}
 .notif-badge.vis{display:flex;}
@@ -475,6 +521,62 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
   <button class="ytpanel-dis" id="yt-dis-btn" onclick="disconnectYT()">התנתק</button>
 </div>
 
+<!-- Settings Panel -->
+<div id="settings-panel">
+  <div class="sp-hdr">
+    <h3>הגדרות</h3>
+    <button class="sp-close" onclick="toggleSettings()"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg></button>
+  </div>
+  <div class="sp-body">
+    <div class="sp-section">חיבור YouTube</div>
+    <div class="sp-row">
+      <span>חשבון YouTube שלי</span>
+      <button class="sp-btn" onclick="toggleYTPanel();toggleSettings()">הגדר</button>
+    </div>
+    <div class="sp-section">תצוגה</div>
+    <div class="sp-row">
+      <span>ערכת צבעים</span>
+      <button class="sp-btn" onclick="toggleTheme()">החלף</button>
+    </div>
+    <div class="sp-row sp-toggle-row">
+      <span>הצג תאריך סרטון</span>
+      <label class="sp-switch"><input type="checkbox" id="set-date" onchange="saveSetting('showDate',this.checked)" checked><span class="sp-slider"></span></label>
+    </div>
+    <div class="sp-row sp-toggle-row">
+      <span>הצג Shorts בדף הבית</span>
+      <label class="sp-switch"><input type="checkbox" id="set-homeshorts" onchange="saveSetting('homeShorts',this.checked)" checked><span class="sp-slider"></span></label>
+    </div>
+    <div class="sp-section">חיפוש</div>
+    <div class="sp-row">
+      <span>אזור תוכן</span>
+      <select class="sp-sel" onchange="saveSetting('region',this.value)" id="set-region">
+        <option value="IL">ישראל</option>
+        <option value="US">ארה"ב</option>
+        <option value="GB">בריטניה</option>
+        <option value="FR">צרפת</option>
+        <option value="DE">גרמניה</option>
+      </select>
+    </div>
+    <div class="sp-section">ניהול נתונים</div>
+    <div class="sp-row">
+      <span>נקה היסטוריית צפייה</span>
+      <button class="sp-btn red" onclick="clearWatched()">נקה</button>
+    </div>
+    <div class="sp-row">
+      <span>נקה מטמון סרטונים</span>
+      <button class="sp-btn red" onclick="clearCache()">נקה</button>
+    </div>
+    <div class="sp-row">
+      <span>אפס הכל</span>
+      <button class="sp-btn red" onclick="resetAll()">אפס</button>
+    </div>
+    <div class="sp-section">מידע</div>
+    <div class="sp-info">MyTube — צופן מותאם אישית לתוכן YouTube</div>
+  </div>
+</div>
+
+<div id="sp-overlay" class="sp-overlay" onclick="toggleSettings()"></div>
+
 <div id="sidebar">
   <div class="nitem on" id="n-all" onclick="setSection('all',this)">
     <span class="ni"><svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></span>
@@ -504,6 +606,14 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
   <div class="sb-label">ערוצים שלי</div>
   <div id="sb-chs"></div>
   <div class="sb-div"></div>
+  <div class="nitem" id="n-personal" onclick="setSection('personal',this)" style="display:none">
+    <span class="ni"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg></span>
+    <span class="nl">אזור אישי</span>
+  </div>
+  <div class="nitem" onclick="toggleSettings()">
+    <span class="ni"><svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg></span>
+    <span class="nl">הגדרות</span>
+  </div>
   <div class="nitem" onclick="hardReload()">
     <span class="ni"><svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg></span>
     <span class="nl">רענן</span>
@@ -518,6 +628,7 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
     <button class="chip" onclick="chip(this,'following')">עוקב אחרי</button>
     <button class="chip" onclick="chip(this,'watched')">צפיתי</button>
     <button class="chip" onclick="chip(this,'shorts')">Shorts</button>
+    <button class="chip" id="chip-personal" style="display:none" onclick="chip(this,'personal')">אזור אישי</button>
   </div>
 
   <button class="back-btn" id="back-btn" onclick="goBack()">
@@ -719,6 +830,7 @@ let modalVid = null, heroVid = null, heroPlaying = false;
 let isFetchingChannels = false;
 let miniVid = null, modalIsPlaying = false;
 let inlineCardVid = null; // video currently playing inline in a card
+let activeIframe = null;  // the actual <iframe> DOM node currently playing
 let initialFollowSet = new Set(); // channels being followed for first time (skip notifications)
 let navHistory = []; // [{section, q, channelFilter}]
 
@@ -743,6 +855,8 @@ function toggleTheme() {
 // ===== YOUTUBE LOGIN =====
 function renderYTUserArea() {
   const area = document.getElementById('yt-user-area');
+  const personalBtn = document.getElementById('n-personal');
+  const personalChip = document.getElementById('chip-personal');
   if (!area) return;
   if (ytUser) {
     area.innerHTML = `<div class="yt-user-chip">
@@ -750,12 +864,16 @@ function renderYTUserArea() {
       <span class="yt-user-name">${x(ytUser.name||'')}</span>
     </div>`;
     document.getElementById('yt-dis-btn').classList.add('vis');
+    if (personalBtn) personalBtn.style.display = '';
+    if (personalChip) personalChip.style.display = '';
   } else {
     area.innerHTML = `<button class="yt-login-btn" onclick="toggleYTPanel()">
       <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
       התחבר ל-YouTube
     </button>`;
     document.getElementById('yt-dis-btn')?.classList.remove('vis');
+    if (personalBtn) personalBtn.style.display = 'none';
+    if (personalChip) personalChip.style.display = 'none';
   }
 }
 
@@ -873,6 +991,7 @@ window.addEventListener('DOMContentLoaded', () => {
   updateBadge();
   updateQuotaDisplay();
   renderYTUserArea();
+  loadSettingsUI();
 
   if (followed.size > 0) {
     fetchFollowedChannelsVideos(false);
@@ -896,7 +1015,14 @@ window.addEventListener('DOMContentLoaded', () => {
     if (yp.classList.contains('open') && !yp.contains(e.target) && !ya.contains(e.target))
       yp.classList.remove('open');
   });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); document.getElementById('yt-panel').classList.remove('open'); } });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      closeModal();
+      document.getElementById('yt-panel').classList.remove('open');
+      document.getElementById('settings-panel').classList.remove('open');
+      document.getElementById('sp-overlay').classList.remove('show');
+    }
+  });
 });
 
 // ===== DISCOVERY CONTENT =====
@@ -1335,28 +1461,85 @@ function fmtDate(iso) {
 }
 
 // ===== MINI PLAYER =====
-function showMiniPlayer(v) {
+function showMiniPlayer(v, existingIframe) {
   miniVid = v;
-  const mp = document.getElementById('mini-player');
   const mpVid = document.getElementById('mp-vid');
   document.getElementById('mp-title').textContent = v.title || 'סרטון YouTube';
-  mpVid.innerHTML = `<iframe src="https://www.youtube.com/embed/${v.id}?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-  mp.classList.add('show');
+  mpVid.innerHTML = '';
+  if (existingIframe) {
+    // Move the live iframe — video continues from exact position
+    existingIframe.style.position = 'absolute';
+    existingIframe.style.inset = '0';
+    existingIframe.style.width = '100%';
+    existingIframe.style.height = '100%';
+    existingIframe.style.border = 'none';
+    mpVid.appendChild(existingIframe);
+    activeIframe = existingIframe;
+  } else {
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.youtube.com/embed/${v.id}?autoplay=1&rel=0&enablejsapi=1`;
+    iframe.allow = 'autoplay; encrypted-media';
+    iframe.allowFullscreen = true;
+    iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:none;';
+    mpVid.appendChild(iframe);
+    activeIframe = iframe;
+  }
+  document.getElementById('mini-player').classList.add('show');
 }
 
 function closeMiniPlayer() {
-  const mp = document.getElementById('mini-player');
-  mp.classList.remove('show');
+  document.getElementById('mini-player').classList.remove('show');
   document.getElementById('mp-vid').innerHTML = '';
   miniVid = null;
   inlineCardVid = null;
+  activeIframe = null;
 }
 
 function expandMiniPlayer() {
   if (!miniVid) return;
   const v = miniVid;
-  closeMiniPlayer();
-  openModal(v);
+  const iframe = activeIframe;
+  // Hide mini player UI without destroying iframe
+  document.getElementById('mini-player').classList.remove('show');
+  miniVid = null;
+  inlineCardVid = null;
+  // Open modal and transplant the live iframe into it
+  _openModalWithIframe(v, iframe);
+}
+
+function _openModalWithIframe(v, iframe) {
+  modalVid = v; modalIsPlaying = true;
+  recordWatch(v.channel); addToWatched(v);
+  const playerEl = document.getElementById('vmodal-player');
+  playerEl.innerHTML = '';
+  if (iframe) {
+    iframe.style.position = 'absolute';
+    iframe.style.inset = '0';
+    iframe.style.width = '100%';
+    iframe.style.height = '100%';
+    iframe.style.border = 'none';
+    playerEl.appendChild(iframe);
+    activeIframe = iframe;
+  } else {
+    playerEl.innerHTML = `<iframe src="https://www.youtube.com/embed/${v.id}?autoplay=1&rel=0&enablejsapi=1" allow="autoplay; encrypted-media" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:none;"></iframe>`;
+    activeIframe = playerEl.querySelector('iframe');
+  }
+  document.getElementById('vmodal-title').textContent = v.title || 'סרטון YouTube';
+  document.getElementById('vmodal-date').textContent = v.publishedAt ? 'עלה ב-' + fmtDate(v.publishedAt) : '';
+  const col = PAL[Math.abs(hsh(v.channel || '')) % PAL.length];
+  const av = document.getElementById('vmodal-ch-av');
+  av.style.background = col + '22'; av.style.color = col;
+  const th = getChThumb(v.channelId);
+  av.innerHTML = th ? `<img src="${x(th)}" onerror="this.outerHTML='<span style=\\"display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:11px;font-weight:700\\">${(v.channel||'?').slice(0,2).toUpperCase()}</span>'">` : `<span style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:11px;font-weight:700">${(v.channel||'?').slice(0,2).toUpperCase()}</span>`;
+  document.getElementById('vmodal-ch-name').textContent = v.channel || 'ערוץ';
+  updateModalLike(); updateModalFollow();
+  const descEl = document.getElementById('vmodal-desc');
+  descEl.classList.remove('exp');
+  document.getElementById('vmodal-expand').innerHTML = 'הצג יותר <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>';
+  if (v.desc) descEl.textContent = v.desc;
+  else { descEl.textContent = 'טוען תיאור...'; fetchDesc(v).then(d => { v.desc = d; if (modalVid?.id === v.id) descEl.textContent = d; }); }
+  document.getElementById('vmodal').classList.add('open');
+  document.body.style.overflow = 'hidden';
 }
 
 function stopAnyCurrentPlayback() {
@@ -1374,32 +1557,11 @@ function stopAnyCurrentPlayback() {
 
 // ===== MODAL =====
 function openModal(v) {
-  // If same video is in mini player, just expand it
+  // If same video is in mini player, just expand it seamlessly
   if (miniVid && miniVid.id === v.id) { expandMiniPlayer(); return; }
   stopAnyCurrentPlayback();
   inlineCardVid = null;
-  modalVid = v; modalIsPlaying = true;
-  recordWatch(v.channel); addToWatched(v);
-  document.getElementById('vmodal-player').innerHTML = `<iframe src="https://www.youtube.com/embed/${v.id}?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-  document.getElementById('vmodal-title').textContent = v.title || 'סרטון YouTube';
-  document.getElementById('vmodal-date').textContent = v.publishedAt ? 'עלה ב-' + fmtDate(v.publishedAt) : '';
-  const col = PAL[Math.abs(hsh(v.channel || '')) % PAL.length];
-  const av = document.getElementById('vmodal-ch-av');
-  av.style.background = col + '22'; av.style.color = col;
-  const th = getChThumb(v.channelId);
-  av.innerHTML = th ? `<img src="${x(th)}" onerror="this.style.background='${col}22';this.outerHTML='<span style=\\"display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:11px;font-weight:700\\">${(v.channel||'?').slice(0,2).toUpperCase()}</span>'">` : `<span style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:11px;font-weight:700">${(v.channel||'?').slice(0,2).toUpperCase()}</span>`;
-  document.getElementById('vmodal-ch-name').textContent = v.channel || 'ערוץ';
-  updateModalLike(); updateModalFollow();
-  const descEl = document.getElementById('vmodal-desc');
-  descEl.classList.remove('exp');
-  document.getElementById('vmodal-expand').innerHTML = 'הצג יותר <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M7 10l5 5 5-5z"/></svg>';
-  if (v.desc) descEl.textContent = v.desc;
-  else {
-    descEl.textContent = 'טוען תיאור...';
-    fetchDesc(v).then(d => { v.desc = d; if (modalVid && modalVid.id === v.id) descEl.textContent = d; });
-  }
-  document.getElementById('vmodal').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  _openModalWithIframe(v, null);
 }
 
 async function fetchDesc(v) {
@@ -1413,14 +1575,13 @@ async function fetchDesc(v) {
 function minimizeModal() {
   if (!modalVid) { closeModal(); return; }
   const v = modalVid;
-  // Close modal without stopping video
+  const iframe = activeIframe;
+  // Hide modal without destroying iframe
   document.getElementById('vmodal').classList.remove('open');
   document.body.style.overflow = '';
-  // Transfer to mini player
-  showMiniPlayer(v);
   modalVid = null; modalIsPlaying = false;
-  // Clear modal player AFTER mini player is shown
-  setTimeout(() => { document.getElementById('vmodal-player').innerHTML = ''; }, 100);
+  // Transfer live iframe to mini player
+  showMiniPlayer(v, iframe);
 }
 
 function closeModal() {
@@ -1428,6 +1589,7 @@ function closeModal() {
   document.getElementById('vmodal-player').innerHTML = '';
   document.body.style.overflow = '';
   modalVid = null; modalIsPlaying = false;
+  activeIframe = null;
 }
 
 function handleModalBg(e) { if (e.target.id === 'vmodal') closeModal(); }
@@ -1615,9 +1777,9 @@ function mkShortCard(v, i) {
 
 // ===== RENDER =====
 function renderAll() {
-  // Before wiping content, rescue any inline card player → mini player
+  // Before wiping content, rescue any inline card player → mini player (with live iframe)
   if (inlineCardVid && !miniVid) {
-    showMiniPlayer(inlineCardVid);
+    showMiniPlayer(inlineCardVid, activeIframe || null);
   }
   inlineCardVid = null;
 
@@ -1738,6 +1900,7 @@ function renderAll() {
   }
 
   if (section === 'shorts') { renderShortsSection(ct); return; }
+  if (section === 'personal') { renderPersonalSection(ct); return; }
 
   if (!ct.children.length && section !== 'all') ct.appendChild(mkEmpty('לא נמצאו סרטונים', ''));
 }
@@ -1943,10 +2106,11 @@ function playInCard(v, thumbEl) {
   inlineCardVid = v;
   thumbEl.classList.add('playing');
   const iframe = document.createElement('iframe');
-  iframe.src = `https://www.youtube.com/embed/${v.id}?autoplay=1&rel=0`;
+  iframe.src = `https://www.youtube.com/embed/${v.id}?autoplay=1&rel=0&enablejsapi=1`;
   iframe.allow = 'autoplay; encrypted-media';
   iframe.allowFullscreen = true;
   thumbEl.appendChild(iframe);
+  activeIframe = iframe;
   recordWatch(v.channel);
   addToWatched(v);
 }
@@ -2109,8 +2273,6 @@ function goHome(e) {
   document.getElementById('n-all').classList.add('on');
   buildSBChannels(); renderAll();
 }
-
-// ===== SEARCH =====
 let searchTimer;
 function onSearchInput(v) {
   q = v.trim();
@@ -2175,7 +2337,100 @@ function playAllLiked() {
   if (lv.length) window.open(`https://www.youtube.com/watch_videos?video_ids=${lv.map(v => v.id).join(',')}`, '_blank');
 }
 
-// ===== UTILS =====
+// ===== SETTINGS =====
+let appSettings = JSON.parse(localStorage.getItem('mset') || '{"showDate":true,"homeShorts":true,"region":"IL"}');
+
+function saveSetting(key, val) {
+  appSettings[key] = val;
+  localStorage.setItem('mset', JSON.stringify(appSettings));
+  if (key === 'region') toast('אזור עודכן — רענן לתוכן חדש');
+}
+
+function toggleSettings() {
+  document.getElementById('settings-panel').classList.toggle('open');
+  document.getElementById('sp-overlay').classList.toggle('show');
+}
+
+function loadSettingsUI() {
+  const sd = document.getElementById('set-date');
+  const sh = document.getElementById('set-homeshorts');
+  const sr = document.getElementById('set-region');
+  if (sd) sd.checked = appSettings.showDate !== false;
+  if (sh) sh.checked = appSettings.homeShorts !== false;
+  if (sr) sr.value = appSettings.region || 'IL';
+}
+
+function clearWatched() {
+  watchedVids = []; localStorage.removeItem('mwatched');
+  toast('היסטוריית צפייה נוקתה'); toggleSettings(); renderAll();
+}
+
+function clearCache() {
+  vids = []; localStorage.removeItem('mvids'); chMap = {};
+  toast('מטמון נוקה — טוען מחדש...'); toggleSettings(); hardReload();
+}
+
+function resetAll() {
+  if (!confirm('למחוק את כל הנתונים? (מועדפים, עקיבות, היסטוריה)')) return;
+  ['mvids','mchids','ml','mf','mcw','mwatched','mbc','mbv','mn','mlv','mcft','mshortvids','mshortft','mset','mytuser','mapicalls','mapiidx'].forEach(k => localStorage.removeItem(k));
+  location.reload();
+}
+
+// ===== PERSONAL AREA =====
+function renderPersonalSection(ct) {
+  if (!ytUser) {
+    const d = document.createElement('div'); d.className = 'empty';
+    d.innerHTML = `<div class="eico"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg></div><h3>לא מחובר ל-YouTube</h3><p>התחבר לערוץ YouTube שלך מהכפתור בסרגל העליון</p><button onclick="toggleYTPanel()" style="margin-top:16px;background:var(--red);color:#fff;border:none;border-radius:20px;padding:10px 24px;font-size:13px;font-family:Rubik,sans-serif;cursor:pointer;font-weight:600">התחבר עכשיו</button>`;
+    ct.appendChild(d); return;
+  }
+  const col = ytUser.col || PAL[0];
+  const area = document.createElement('div'); area.className = 'personal-area';
+
+  area.innerHTML = `
+    <div class="pa-hdr">
+      <div class="pa-av" style="background:${col}22;color:${col}">${ytUser.thumb ? `<img src="${x(ytUser.thumb)}" onerror="this.remove()">` : (ytUser.name||'?').slice(0,2).toUpperCase()}</div>
+      <div>
+        <div class="pa-name">${x(ytUser.name||'')}</div>
+        <div class="pa-sub">הערוץ שלי ב-YouTube</div>
+      </div>
+    </div>
+    <div class="pa-stat-row">
+      <div class="pa-stat"><div class="pa-stat-num">${likes.size}</div><div class="pa-stat-lbl">אהבתי</div></div>
+      <div class="pa-stat"><div class="pa-stat-num">${followed.size}</div><div class="pa-stat-lbl">עוקב אחרי</div></div>
+      <div class="pa-stat"><div class="pa-stat-num">${watchedVids.length}</div><div class="pa-stat-lbl">נצפו</div></div>
+    </div>
+    <div class="pa-actions">
+      <button class="pa-btn primary" onclick="uploadToYouTube()">
+        <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>
+        העלה סרטון ל-YouTube
+      </button>
+      <button class="pa-btn secondary" onclick="window.open('https://studio.youtube.com','_blank')">
+        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+        YouTube Studio
+      </button>
+      <button class="pa-btn secondary" onclick="window.open('https://www.youtube.com/channel/${x(ytUser.channelId||'')}','_blank')">
+        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+        פתח ערוץ ביוטיוב
+      </button>
+    </div>
+    <div class="pa-section">ניהול</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <button class="pa-btn secondary" onclick="setSection('liked',document.getElementById('n-liked'))">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+        סרטונים שאהבתי
+      </button>
+      <button class="pa-btn secondary" onclick="setSection('watched',document.getElementById('n-watched'))">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9z"/></svg>
+        היסטוריית צפייה
+      </button>
+    </div>`;
+  ct.appendChild(area);
+}
+
+function uploadToYouTube() {
+  window.open('https://www.youtube.com/upload', '_blank');
+  toast('נפתח YouTube Studio להעלאת סרטון');
+}
 function hsh(s) { let r = 0; for (let i = 0; i < s.length; i++) r = ((r << 5) - r) + s.charCodeAt(i) | 0; return r; }
 function x(s = '') { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
 let _t;
