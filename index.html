@@ -43,18 +43,49 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
 #search-btn{background:var(--bg3);border:1.5px solid var(--bg4);border-left:none;border-radius:0 24px 24px 0;padding:0 18px;height:38px;cursor:pointer;color:var(--txt);display:flex;align-items:center;transition:background var(--ease);}
 #search-btn:hover{background:var(--bg4);}
 #search-btn svg{width:18px;height:18px;fill:currentColor;}
-#search-drop{position:absolute;top:44px;right:0;left:0;background:var(--bg2);border:1px solid var(--bg4);border-radius:10px;box-shadow:0 8px 24px var(--shadow);z-index:300;display:none;overflow:hidden;}
+#search-drop{position:absolute;top:44px;right:0;left:0;background:var(--bg2);border:1px solid var(--bg4);border-radius:10px;box-shadow:0 8px 24px var(--shadow);z-index:300;display:none;overflow:hidden;max-height:300px;overflow-y:auto;}
 #search-drop.show{display:block;}
 .sdrop-item{padding:10px 16px;cursor:pointer;display:flex;align-items:center;gap:10px;transition:background var(--ease);direction:rtl;font-size:13px;}
 .sdrop-item:hover{background:var(--bg3);}
 .sdrop-item svg{width:16px;height:16px;fill:var(--txt3);flex-shrink:0;}
 .sdrop-label{font-size:10px;color:var(--txt3);font-weight:600;padding:6px 16px 2px;text-transform:uppercase;letter-spacing:.5px;}
 .tb-r{display:flex;align-items:center;gap:6px;margin-inline-start:auto;flex-shrink:0;}
-.avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#ff6b6b,#ffd93d);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;cursor:pointer;flex-shrink:0;transition:transform var(--ease);}
-.avatar:hover{transform:scale(1.1);}
-.bell-wrap{position:relative;}
-.notif-badge{position:absolute;top:5px;right:5px;width:16px;height:16px;border-radius:50%;background:var(--red);font-size:10px;font-weight:700;display:none;align-items:center;justify-content:center;color:#fff;pointer-events:none;border:2px solid var(--bg);}
-.notif-badge.vis{display:flex;}
+
+/* QUOTA PILL */
+.quota-pill{background:var(--bg3);border:1px solid var(--bg4);border-radius:20px;padding:4px 10px;font-size:11px;font-weight:600;color:var(--txt2);display:flex;align-items:center;gap:5px;cursor:help;white-space:nowrap;flex-shrink:0;position:relative;}
+.quota-pill.low{color:#ff9800;border-color:#ff9800;}
+.quota-pill.crit{color:#ff4444;border-color:#ff4444;}
+.quota-dot{width:6px;height:6px;border-radius:50%;background:#4caf50;flex-shrink:0;}
+.quota-pill.low .quota-dot{background:#ff9800;}
+.quota-pill.crit .quota-dot{background:#ff4444;}
+
+/* YOUTUBE LOGIN */
+.yt-login-btn{background:var(--red);color:#fff;border:none;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Rubik',sans-serif;display:flex;align-items:center;gap:6px;transition:background var(--ease);flex-shrink:0;}
+.yt-login-btn:hover{background:var(--red2);}
+.yt-login-btn svg{width:14px;height:14px;fill:currentColor;}
+.yt-user-chip{display:flex;align-items:center;gap:6px;background:var(--bg3);border:1px solid var(--bg4);border-radius:20px;padding:3px 10px 3px 3px;cursor:pointer;transition:background var(--ease);}
+.yt-user-chip:hover{background:var(--bg4);}
+.yt-user-av{width:26px;height:26px;border-radius:50%;object-fit:cover;flex-shrink:0;}
+.yt-user-av.init{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
+.yt-user-name{font-size:12px;font-weight:500;max-width:90px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+/* YT CONNECT PANEL */
+#yt-panel{position:fixed;top:calc(var(--th)+8px);left:12px;width:280px;background:var(--bg2);border:1px solid var(--bg4);border-radius:12px;box-shadow:0 8px 32px var(--shadow);z-index:300;padding:16px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;transform:translateY(-8px);direction:rtl;}
+#yt-panel.open{opacity:1;pointer-events:all;transform:translateY(0);}
+#yt-panel h4{font-size:14px;font-weight:600;margin-bottom:10px;}
+#yt-panel input{width:100%;background:var(--bg3);border:1px solid var(--bg4);border-radius:8px;padding:8px 12px;color:var(--txt);font-size:13px;font-family:'Rubik',sans-serif;outline:none;margin-bottom:8px;}
+#yt-panel input:focus{border-color:var(--blue);}
+#yt-panel p{font-size:11px;color:var(--txt3);margin-bottom:10px;line-height:1.5;}
+.ytpanel-btn{width:100%;background:var(--red);color:#fff;border:none;border-radius:8px;padding:8px;font-size:13px;font-family:'Rubik',sans-serif;cursor:pointer;font-weight:600;transition:background var(--ease);margin-bottom:6px;}
+.ytpanel-btn:hover{background:var(--red2);}
+.ytpanel-dis{width:100%;background:var(--bg3);color:var(--txt2);border:1px solid var(--bg4);border-radius:8px;padding:6px;font-size:12px;font-family:'Rubik',sans-serif;cursor:pointer;display:none;}
+#yt-panel .ytpanel-dis.vis{display:block;}
+
+/* BACK BUTTON */
+.back-btn{display:none;align-items:center;gap:6px;background:var(--bg3);border:none;color:var(--txt);cursor:pointer;border-radius:20px;padding:7px 14px;font-size:13px;font-family:'Rubik',sans-serif;margin-bottom:16px;transition:background var(--ease);}
+.back-btn.show{display:flex;}
+.back-btn:hover{background:var(--bg4);}
+.back-btn svg{width:18px;height:18px;fill:currentColor;}
 
 /* SIDEBAR */
 #sidebar{position:fixed;top:var(--th);right:0;width:var(--sw);height:calc(100vh - var(--th));background:var(--bg);overflow-y:auto;overflow-x:hidden;padding:8px 0 24px;z-index:100;transition:width var(--ease);scrollbar-width:thin;scrollbar-color:var(--bg4) transparent;}
@@ -76,9 +107,10 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
 .chitem{display:flex;align-items:center;gap:10px;height:40px;padding:0 12px 0 8px;cursor:pointer;border-radius:10px;margin:2px 8px;transition:background var(--ease);color:var(--txt);white-space:nowrap;overflow:hidden;}
 .chitem:hover{background:var(--bg3);}
 .chitem.active{background:var(--bg3);}
-.chdot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;position:relative;}
-.chdot .ndot{position:absolute;top:-2px;right:-2px;width:9px;height:9px;border-radius:50%;background:var(--red);border:2px solid var(--bg);display:none;}
+.chdot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;position:relative;overflow:hidden;}
+.chdot .ndot{position:absolute;top:-2px;right:-2px;width:9px;height:9px;border-radius:50%;background:var(--red);border:2px solid var(--bg);display:none;z-index:2;}
 .chdot.hn .ndot{display:block;}
+.chdot img{width:100%;height:100%;object-fit:cover;border-radius:50%;}
 .chname{font-size:13px;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0;}
 #sidebar.col .chitem{padding:0;justify-content:center;gap:0;}
 #sidebar.col .chname{display:none;}
@@ -112,7 +144,8 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
 .hero-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,0,0,.12);border:1px solid rgba(255,0,0,.2);color:var(--red);font-size:11px;font-weight:600;border-radius:20px;padding:4px 10px;margin-bottom:10px;width:fit-content;}
 .hero-title{font-size:16px;font-weight:600;line-height:1.4;color:var(--txt);margin-bottom:8px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
 .hero-ch{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
-.hero-ch-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.hero-ch-av{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;overflow:hidden;}
+.hero-ch-av img{width:100%;height:100%;object-fit:cover;}
 .hero-ch-name{font-size:13px;color:var(--txt2);}
 .hero-desc{font-size:12px;color:var(--txt3);line-height:1.6;flex:1;overflow:hidden;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;}
 .hero-actions{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;}
@@ -134,9 +167,32 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
 .fetch-indicator svg{width:14px;height:14px;fill:var(--txt3);animation:spin 1s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
 
-/* Channel page */
-.ch-page-hdr{display:flex;align-items:center;gap:14px;padding:16px 0 20px;border-bottom:1px solid var(--border);margin-bottom:20px;}
-.ch-page-av{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;}
+/* FEATURED VIDEO (Graduated layout) */
+.featured-vid{margin-bottom:24px;border-radius:14px;overflow:hidden;cursor:pointer;position:relative;aspect-ratio:16/9;background:var(--bg3);}
+.featured-vid img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s;}
+.featured-vid:hover img{transform:scale(1.02);}
+.featured-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 30%,rgba(0,0,0,.85));display:flex;flex-direction:column;justify-content:flex-end;padding:24px;}
+.featured-badge{background:var(--red);color:#fff;font-size:10px;font-weight:700;border-radius:4px;padding:3px 8px;width:fit-content;margin-bottom:10px;}
+.featured-title{font-size:22px;font-weight:700;color:#fff;margin-bottom:10px;line-height:1.3;}
+.featured-meta{display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,.8);}
+.featured-av{width:26px;height:26px;border-radius:50%;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;}
+.featured-av img{width:100%;height:100%;object-fit:cover;}
+.featured-date{font-size:11px;color:rgba(255,255,255,.65);}
+.featured-play-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity var(--ease);}
+.featured-vid:hover .featured-play-hint{opacity:1;}
+.fpc{width:72px;height:72px;border-radius:50%;background:rgba(220,0,0,.9);display:flex;align-items:center;justify-content:center;box-shadow:0 6px 24px rgba(0,0,0,.5);}
+.fpc svg{width:32px;height:32px;fill:#fff;margin-inline-start:4px;}
+
+/* GRADUATED GRIDS */
+.vgrid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;}
+.vgrid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:24px;}
+@media(max-width:900px){.vgrid-2{grid-template-columns:1fr;}.vgrid-3{grid-template-columns:1fr 1fr;}}
+@media(max-width:600px){.vgrid-3{grid-template-columns:1fr;}}
+
+/* CHANNEL PAGE */
+.ch-page-hdr{display:flex;align-items:center;gap:14px;padding:16px 0 20px;border-bottom:1px solid var(--border);margin-bottom:0;}
+.ch-page-av{width:70px;height:70px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;overflow:hidden;flex-shrink:0;}
+.ch-page-av img{width:100%;height:100%;object-fit:cover;}
 .ch-page-name{font-size:20px;font-weight:700;margin-bottom:4px;}
 .ch-page-sub{font-size:13px;color:var(--txt3);}
 .ch-follow-btn{background:var(--red);color:#fff;border:none;border-radius:20px;padding:8px 20px;font-size:13px;font-family:'Rubik',sans-serif;cursor:pointer;font-weight:600;transition:background var(--ease);}
@@ -144,9 +200,16 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
 .ch-follow-btn.following{background:var(--bg3);color:var(--txt);}
 .ch-follow-btn.following:hover{background:var(--bg4);}
 
+/* CHANNEL TABS */
+.ch-tabs{display:flex;gap:0;margin-bottom:20px;border-bottom:1px solid var(--border);margin-top:16px;}
+.ch-tab{background:none;border:none;border-bottom:2px solid transparent;color:var(--txt2);cursor:pointer;padding:10px 18px;font-size:14px;font-family:'Rubik',sans-serif;font-weight:500;transition:all var(--ease);margin-bottom:-1px;}
+.ch-tab:hover{color:var(--txt);}
+.ch-tab.on{color:var(--txt);border-bottom-color:var(--red);font-weight:600;}
+
 /* Channel search result */
 .ch-result{display:flex;align-items:center;gap:16px;padding:14px 0;border-bottom:1px solid var(--border);cursor:pointer;}
-.ch-result-av{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;flex-shrink:0;}
+.ch-result-av{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:700;flex-shrink:0;overflow:hidden;}
+.ch-result-av img{width:100%;height:100%;object-fit:cover;}
 .ch-result-name{font-size:16px;font-weight:600;transition:color var(--ease);}
 .ch-result:hover .ch-result-name{color:var(--blue);}
 .ch-result-sub{font-size:12px;color:var(--txt3);margin-top:2px;}
@@ -180,38 +243,37 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
 .vthumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .3s;}
 .vcard:hover .vthumb img{transform:scale(1.04);}
 .vthumb iframe{position:absolute;inset:0;width:100%;height:100%;border:none;z-index:2;}
-.vthumb.playing img{display:none;}
-.vthumb.playing .vhover{display:none;}
 .vhover{position:absolute;inset:0;background:rgba(0,0,0,.1);opacity:0;transition:opacity var(--ease);z-index:1;}
 .vcard:hover .vhover{opacity:1;}
 
 /* Action Buttons Overlay */
-.v-actions{position:absolute;top:8px;left:8px;display:flex;flex-direction:row;gap:6px;opacity:0;z-index:5;transition:opacity var(--ease);}
+.v-actions{position:absolute;top:8px;left:8px;display:flex;flex-direction:row;gap:5px;opacity:0;z-index:5;transition:opacity var(--ease);}
 .vcard:hover .v-actions{opacity:1;}
-.va-btn{background:rgba(0,0,0,.7);border:none;border-radius:50%;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform var(--ease),background var(--ease);color:#fff;}
+.va-btn{background:rgba(0,0,0,.72);border:none;border-radius:50%;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform var(--ease),background var(--ease);color:#fff;flex-shrink:0;}
 .va-btn:hover{transform:scale(1.15);background:rgba(0,0,0,.9);}
-.va-btn svg{width:16px;height:16px;fill:currentColor;transition:fill var(--ease);}
-.va-btn.liked-btn.on{background:rgba(255,78,78,.85);color:#fff;}
+.va-btn svg{width:15px;height:15px;fill:currentColor;}
+.va-btn.liked-btn.on{background:rgba(255,78,78,.85);}
 .va-btn.liked-btn.on svg{fill:#fff;}
 
-/* Liked badge — always visible on thumb corner */
+/* Liked badge */
 .liked-corner{position:absolute;bottom:8px;right:8px;width:26px;height:26px;border-radius:50%;background:rgba(255,78,78,.9);display:none;align-items:center;justify-content:center;z-index:5;pointer-events:none;box-shadow:0 2px 8px rgba(0,0,0,.4);}
 .liked-corner svg{width:13px;height:13px;fill:#fff;}
 .vcard.is-liked .liked-corner{display:flex;}
-/* When card is liked, keep like button visible even without hover */
 .vcard.is-liked .v-actions{opacity:1;}
 .vcard.is-liked .v-actions .va-btn:not(.liked-btn){opacity:0;pointer-events:none;}
 .vcard.is-liked:hover .v-actions .va-btn{opacity:1;pointer-events:auto;}
 
 .vnew-badge{position:absolute;top:8px;right:8px;background:var(--red);color:#fff;font-size:9px;font-weight:700;border-radius:4px;padding:2px 6px;pointer-events:none;z-index:5;}
 .vinfo{display:flex;gap:10px;padding:10px 2px 0;}
-.vav{width:34px;height:34px;border-radius:50%;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer;transition:opacity var(--ease);}
+.vav{width:34px;height:34px;border-radius:50%;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer;transition:opacity var(--ease);overflow:hidden;}
 .vav:hover{opacity:.75;}
+.vav img{width:100%;height:100%;object-fit:cover;}
 .vtxt{flex:1;min-width:0;}
 .vtitle{font-size:14px;font-weight:500;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--txt);margin-bottom:4px;cursor:pointer;}
 .vtitle:hover{color:var(--blue);}
 .vch{font-size:12px;color:var(--txt3);display:flex;align-items:center;gap:4px;margin-bottom:2px;}
 .vch svg{width:12px;height:12px;fill:currentColor;}
+.vdate{font-size:11px;color:var(--txt3);margin-top:1px;}
 .vlabel{font-size:11px;color:var(--like);font-weight:500;display:flex;align-items:center;gap:3px;}
 .vlabel svg{width:10px;height:10px;fill:var(--like);}
 
@@ -241,14 +303,20 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
 #vmodal-close{position:absolute;top:12px;left:12px;background:rgba(0,0,0,.7);border:none;color:#fff;border-radius:50%;width:36px;height:36px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;transition:background var(--ease);}
 #vmodal-close:hover{background:rgba(255,255,255,.2);}
 #vmodal-close svg{width:20px;height:20px;fill:currentColor;}
+/* Minimize button */
+#vmodal-min{position:absolute;top:12px;left:56px;background:rgba(0,0,0,.7);border:none;color:#fff;border-radius:50%;width:36px;height:36px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10;transition:background var(--ease);}
+#vmodal-min:hover{background:rgba(255,255,255,.2);}
+#vmodal-min svg{width:18px;height:18px;fill:currentColor;}
 #vmodal-player{position:relative;width:100%;aspect-ratio:16/9;background:#000;}
 #vmodal-player iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
 #vmodal-info{padding:18px 22px 22px;direction:rtl;}
-#vmodal-title{font-size:18px;font-weight:600;line-height:1.4;margin-bottom:10px;}
+#vmodal-title{font-size:18px;font-weight:600;line-height:1.4;margin-bottom:8px;}
+#vmodal-date{font-size:12px;color:var(--txt3);margin-bottom:10px;}
 #vmodal-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;}
 #vmodal-channel{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--txt2);cursor:pointer;}
 #vmodal-channel:hover{color:var(--blue);}
-#vmodal-ch-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;}
+#vmodal-ch-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;overflow:hidden;}
+#vmodal-ch-av img{width:100%;height:100%;object-fit:cover;}
 #vmodal-actions{display:flex;gap:8px;flex-wrap:wrap;}
 .mod-btn{display:flex;align-items:center;gap:6px;background:var(--bg3);border:none;color:var(--txt);border-radius:20px;padding:8px 16px;font-size:13px;font-family:'Rubik',sans-serif;cursor:pointer;transition:background var(--ease),color var(--ease);}
 .mod-btn:hover{background:var(--bg4);}
@@ -260,6 +328,19 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
 #vmodal-desc.exp{max-height:400px;}
 #vmodal-expand{font-size:12px;color:var(--blue);background:none;border:none;cursor:pointer;font-family:'Rubik',sans-serif;margin-top:6px;padding:0;display:flex;align-items:center;gap:4px;}
 
+/* MINI PLAYER */
+#mini-player{position:fixed;bottom:20px;left:20px;width:308px;background:var(--bg2);border-radius:12px;border:1px solid var(--border);box-shadow:0 12px 40px var(--shadow);z-index:600;display:none;flex-direction:column;overflow:hidden;animation:mpIn .2s ease;}
+#mini-player.show{display:flex;}
+@keyframes mpIn{from{transform:translateY(20px);opacity:0}to{transform:none;opacity:1}}
+.mp-vid{position:relative;width:100%;aspect-ratio:16/9;background:#000;cursor:pointer;}
+.mp-vid iframe{position:absolute;inset:0;width:100%;height:100%;border:none;}
+.mp-bar{padding:8px 10px;display:flex;align-items:center;gap:6px;background:var(--bg2);}
+.mp-title{flex:1;font-size:11px;color:var(--txt);line-height:1.35;overflow:hidden;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;cursor:pointer;}
+.mp-title:hover{color:var(--blue);}
+.mp-btn{width:26px;height:26px;border-radius:50%;background:none;border:none;cursor:pointer;color:var(--txt2);display:flex;align-items:center;justify-content:center;transition:background var(--ease);flex-shrink:0;}
+.mp-btn:hover{background:var(--bg3);}
+.mp-btn svg{width:14px;height:14px;fill:currentColor;}
+
 /* NOTIFICATIONS */
 #notif-panel{position:fixed;top:calc(var(--th) + 8px);left:16px;width:340px;background:var(--bg2);border:1px solid var(--bg4);border-radius:12px;box-shadow:0 8px 32px var(--shadow);z-index:300;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;max-height:420px;overflow-y:auto;transform:translateY(-8px);}
 #notif-panel.open{opacity:1;pointer-events:all;transform:translateY(0);}
@@ -269,7 +350,8 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
 .notif-item{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;gap:10px;cursor:pointer;transition:background var(--ease);direction:rtl;}
 .notif-item:hover{background:var(--bg3);}
 .notif-item.unread{border-inline-start:3px solid var(--red);}
-.notif-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;}
+.notif-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0;overflow:hidden;}
+.notif-av img{width:100%;height:100%;object-fit:cover;}
 .notif-body{flex:1;min-width:0;}
 .notif-txt{font-size:13px;line-height:1.4;margin-bottom:3px;}
 .notif-time{font-size:11px;color:var(--txt3);}
@@ -282,7 +364,7 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
 .ctx-item svg{width:15px;height:15px;fill:currentColor;flex-shrink:0;opacity:.7;}
 .ctx-sep{height:1px;background:var(--border);margin:4px 0;}
 
-/* === HERO CAROUSEL === */
+/* HERO CAROUSEL */
 .hero-carousel-nav{position:absolute;inset:0;pointer-events:none;display:flex;align-items:center;justify-content:space-between;padding:0 8px;z-index:4;}
 .hero-arr{pointer-events:all;background:rgba(0,0,0,.55);border:none;color:#fff;border-radius:50%;width:34px;height:34px;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity var(--ease);}
 .hero-player-wrap:hover .hero-arr{opacity:1;}
@@ -293,21 +375,7 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
 .hero-tbar{position:absolute;bottom:0;left:0;height:3px;background:var(--red);z-index:6;width:0;}
 .hero-tbar.run{transition:width 3s linear;width:100%;}
 
-/* === BIG PLAY BUTTON === */
-.big-play-ov{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity var(--ease);z-index:3;pointer-events:none;}
-.vcard:hover .big-play-ov{opacity:1;}
-.big-play-ov .bpc{width:54px;height:54px;border-radius:50%;background:rgba(220,0,0,.88);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 18px rgba(0,0,0,.4);transform:scale(.85);transition:transform var(--ease);pointer-events:all;cursor:pointer;}
-.vcard:hover .big-play-ov .bpc{transform:scale(1);}
-.big-play-ov .bpc svg{width:22px;height:22px;fill:#fff;margin-inline-start:3px;}
-/* Modal open button on card */
-.va-btn.modal-btn{background:rgba(0,0,0,.7);}
-.card-play-hint{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);display:flex;gap:6px;opacity:0;transition:opacity var(--ease);z-index:4;pointer-events:none;}
-.vcard:hover .card-play-hint{opacity:1;}
-.cph-btn{background:rgba(0,0,0,.75);color:#fff;border:none;border-radius:16px;padding:5px 11px;font-size:11px;font-weight:600;font-family:'Rubik',sans-serif;cursor:pointer;display:flex;align-items:center;gap:5px;pointer-events:all;backdrop-filter:blur(4px);transition:background var(--ease);}
-.cph-btn:hover{background:rgba(0,0,0,.92);}
-.cph-btn svg{width:13px;height:13px;fill:currentColor;}
-
-/* === CHANNEL GRID (search results) === */
+/* CHANNEL GRID (search) */
 .ch-grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:10px;}
 @media(max-width:800px){.ch-grid-4{grid-template-columns:repeat(2,1fr);}}
 .ch-g-card{display:flex;flex-direction:column;align-items:center;gap:7px;padding:14px 8px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;cursor:pointer;transition:background var(--ease),border-color var(--ease);text-align:center;}
@@ -322,14 +390,15 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
 .ch-more-btn{display:flex;align-items:center;gap:5px;margin:8px auto 0;background:none;border:1px solid var(--bg4);color:var(--blue);border-radius:8px;padding:6px 16px;font-size:12px;cursor:pointer;font-family:'Rubik',sans-serif;}
 .ch-more-btn:hover{background:var(--bg3);}
 
-/* === SHORTS === */
+/* SHORTS */
 .shorts-row{display:flex;gap:10px;overflow-x:auto;padding-bottom:8px;scrollbar-width:none;}
 .shorts-row::-webkit-scrollbar{display:none;}
 .short-card{flex-shrink:0;width:152px;border-radius:12px;overflow:hidden;background:var(--bg2);border:1px solid var(--border);cursor:pointer;transition:transform var(--ease);animation:fu .35s both;}
 .short-card:hover{transform:translateY(-3px);}
 .short-thumb{position:relative;aspect-ratio:9/16;background:var(--bg3);overflow:hidden;}
-.short-thumb img{width:100%;height:100%;object-fit:cover;}
-.short-thumb .splay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.15);opacity:0;transition:opacity var(--ease);}
+.short-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .3s;}
+.short-card:hover .short-thumb img{transform:scale(1.04);}
+.short-thumb .splay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.2);opacity:0;transition:opacity var(--ease);}
 .short-card:hover .splay{opacity:1;}
 .splay-c{width:42px;height:42px;border-radius:50%;background:rgba(220,0,0,.88);display:flex;align-items:center;justify-content:center;}
 .splay-c svg{width:18px;height:18px;fill:#fff;margin-inline-start:2px;}
@@ -337,9 +406,24 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
 .short-info{padding:7px 8px 9px;}
 .short-title{font-size:11px;font-weight:500;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--txt);margin-bottom:3px;}
 .short-ch{font-size:10px;color:var(--txt3);}
+/* Inline short player */
+.short-inline-player{position:absolute;inset:0;z-index:10;}
+.short-inline-player iframe{width:100%;height:100%;border:none;}
+.short-close-btn{position:absolute;top:6px;left:6px;z-index:11;background:rgba(0,0,0,.7);border:none;color:#fff;border-radius:50%;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.short-close-btn svg{width:14px;height:14px;fill:currentColor;}
+
+/* NOTIF BADGE */
+.bell-wrap{position:relative;}
+.notif-badge{position:absolute;top:5px;right:5px;width:16px;height:16px;border-radius:50%;background:var(--red);font-size:10px;font-weight:700;display:none;align-items:center;justify-content:center;color:#fff;pointer-events:none;border:2px solid var(--bg);}
+.notif-badge.vis{display:flex;}
+
+/* Avatar generic */
+.avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#ff6b6b,#ffd93d);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;cursor:pointer;flex-shrink:0;transition:transform var(--ease);overflow:hidden;}
+.avatar:hover{transform:scale(1.1);}
+.avatar img{width:100%;height:100%;object-fit:cover;}
 
 @media(max-width:900px){.hero-inner{grid-template-columns:1fr;}.hero-info{display:none;}}
-@media(max-width:760px){#sidebar{display:none;}#main{margin-inline-end:0!important;padding:16px 14px;}.vgrid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));}#search-area{max-width:none;}#vmodal-inner{max-width:100%;}#notif-panel{right:8px;left:8px;width:auto;}}
+@media(max-width:760px){#sidebar{display:none;}#main{margin-inline-end:0!important;padding:16px 14px;}.vgrid{grid-template-columns:repeat(auto-fill,minmax(220px,1fr));}#search-area{max-width:none;}#vmodal-inner{max-width:100%;}#notif-panel{right:8px;left:8px;width:auto;}#mini-player{left:8px;right:8px;width:auto;}}
 ::-webkit-scrollbar{width:5px;height:5px;}
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:var(--bg4);border-radius:4px;}
@@ -365,6 +449,10 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
     <div id="search-drop"></div>
   </div>
   <div class="tb-r">
+    <div class="quota-pill" id="quota-pill" title="יתרת בקשות API יומיות">
+      <div class="quota-dot"></div>
+      <span class="quota-val">—</span>
+    </div>
     <button class="tbtn" onclick="toggleTheme()" title="שנה עיצוב">
       <svg id="theme-icon" viewBox="0 0 24 24"><path d="M20 8.69V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12 20 8.69zM12 18c-3.31 0-6-2.69-6-6s2.69-6 6-6 6 2.69 6 6-2.69 6-6 6zm0-10c-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4-1.79-4-4-4z"/></svg>
     </button>
@@ -374,8 +462,17 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
       </button>
       <div class="notif-badge" id="notif-badge"></div>
     </div>
-    <div class="avatar">ד</div>
+    <div id="yt-user-area" onclick="toggleYTPanel()"></div>
   </div>
+</div>
+
+<!-- YouTube Connect Panel -->
+<div id="yt-panel">
+  <h4>התחברות ל-YouTube</h4>
+  <p>הכנס את מזהה הערוץ שלך ב-YouTube (מתחיל ב-@ או UC...)</p>
+  <input id="yt-handle-input" type="text" placeholder="@handle או UC...">
+  <button class="ytpanel-btn" onclick="connectYT()">התחבר</button>
+  <button class="ytpanel-dis" id="yt-dis-btn" onclick="disconnectYT()">התנתק</button>
 </div>
 
 <div id="sidebar">
@@ -422,6 +519,11 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
     <button class="chip" onclick="chip(this,'watched')">צפיתי</button>
     <button class="chip" onclick="chip(this,'shorts')">Shorts</button>
   </div>
+
+  <button class="back-btn" id="back-btn" onclick="goBack()">
+    <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+    חזור
+  </button>
 
   <div id="hero">
     <div class="hero-inner">
@@ -478,9 +580,13 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
     <button id="vmodal-close" onclick="closeModal()">
       <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
     </button>
+    <button id="vmodal-min" onclick="minimizeModal()" title="הקטן">
+      <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+    </button>
     <div id="vmodal-player"></div>
     <div id="vmodal-info">
       <div id="vmodal-title"></div>
+      <div id="vmodal-date"></div>
       <div id="vmodal-meta">
         <div id="vmodal-channel" onclick="modalGoChannel()">
           <div id="vmodal-ch-av"></div>
@@ -508,6 +614,20 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
   </div>
 </div>
 
+<!-- MINI PLAYER -->
+<div id="mini-player">
+  <div class="mp-vid" id="mp-vid" onclick="expandMiniPlayer()"></div>
+  <div class="mp-bar">
+    <div class="mp-title" id="mp-title" onclick="expandMiniPlayer()"></div>
+    <button class="mp-btn" onclick="expandMiniPlayer()" title="הרחב">
+      <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+    </button>
+    <button class="mp-btn" onclick="closeMiniPlayer()" title="סגור">
+      <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
+    </button>
+  </div>
+</div>
+
 <div id="notif-panel">
   <div class="notif-hdr">
     <h3>התראות</h3>
@@ -517,16 +637,71 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
 </div>
 
 <script>
+// ===== API KEY ROTATION =====
+const API_KEYS = [
+  'AIzaSyCSK9j1UHoVymA_ViQa9jh8xis1QnYuHWo',
+  'AIzaSyBe6tl5Maj-iJ9kixVJLmAEt3wg6ej02H4',
+  'AIzaSyAFciXi4t5Qs8NCgtqafDw0_LM_rMLjNv8',
+  'AIzaSyBSK05_juxzJF_t8f_K1vYuFuPKv_OriBE',
+  'AIzaSyDzf_12LV7xvJ0icyRG18cM7W9b-wBjMKM'
+];
+let apiKeyIdx = parseInt(localStorage.getItem('mapiidx') || '0');
+let apiCallsToday = JSON.parse(localStorage.getItem('mapicalls') || '{}');
+const apiCallsDate = localStorage.getItem('mapicdate') || '';
+const MAX_CALLS_PER_KEY = 90; // ~100 search units out of 10,000 quota
+
+function getKey() {
+  const today = new Date().toDateString();
+  if (apiCallsDate !== today) {
+    localStorage.setItem('mapicdate', today);
+    localStorage.setItem('mapicalls', '{}');
+    apiCallsToday = {};
+  }
+  return API_KEYS[apiKeyIdx % API_KEYS.length];
+}
+
+async function apiGet(baseUrl) {
+  const key = getKey();
+  const url = baseUrl + '&key=' + key;
+  try {
+    const r = await fetch(url);
+    const d = await r.json();
+    // Track usage
+    apiCallsToday[key] = (apiCallsToday[key] || 0) + 1;
+    localStorage.setItem('mapicalls', JSON.stringify(apiCallsToday));
+    updateQuotaDisplay();
+    if (d.error && (d.error.code === 403 || d.error.code === 429 || (d.error.errors && d.error.errors[0]?.reason === 'quotaExceeded'))) {
+      // Rotate to next key
+      apiKeyIdx = (apiKeyIdx + 1) % API_KEYS.length;
+      localStorage.setItem('mapiidx', String(apiKeyIdx));
+      toast('מחליף API מפתח...');
+      const r2 = await fetch(baseUrl + '&key=' + getKey());
+      return r2.json();
+    }
+    return d;
+  } catch(e) { throw e; }
+}
+
+function updateQuotaDisplay() {
+  const el = document.getElementById('quota-pill');
+  if (!el) return;
+  const totalRemaining = API_KEYS.reduce((sum, k) => sum + Math.max(0, MAX_CALLS_PER_KEY - (apiCallsToday[k] || 0)), 0);
+  const pct = totalRemaining / (API_KEYS.length * MAX_CALLS_PER_KEY);
+  el.querySelector('.quota-val').textContent = `${totalRemaining} בקשות`;
+  el.className = 'quota-pill' + (pct < 0.15 ? ' crit' : pct < 0.35 ? ' low' : '');
+  el.title = `מפתח ${(apiKeyIdx % API_KEYS.length) + 1}/${API_KEYS.length} פעיל | ${totalRemaining} בקשות נשארו היום`;
+}
+
 // ===== CONFIG =====
-const API_KEY = 'AIzaSyA-ACNf2ha30BDOmF2_XKk5W2wR_hei2VA';
 const MAX_VIDS_CACHE = 500;
-const CHANNEL_FETCH_COOLDOWN = 60 * 60 * 1000; // 1 hour
+const CHANNEL_FETCH_COOLDOWN = 60 * 60 * 1000;
 const REGION = 'IL';
 const LANG = 'iw';
 
 // ===== STATE =====
 let vids = JSON.parse(localStorage.getItem('mvids') || '[]');
 let chMap = {}, chIdMap = JSON.parse(localStorage.getItem('mchids') || '{}');
+let chThumbCache = JSON.parse(localStorage.getItem('mchth') || '{}'); // channelId → thumbUrl
 let likes = new Set(JSON.parse(localStorage.getItem('ml') || '[]'));
 let followed = new Set(JSON.parse(localStorage.getItem('mf') || '[]'));
 let chWatches = JSON.parse(localStorage.getItem('mcw') || '{}');
@@ -537,10 +712,19 @@ let notifications = JSON.parse(localStorage.getItem('mn') || '[]');
 let chLastVids = JSON.parse(localStorage.getItem('mlv') || '{}');
 let chFetchTimes = JSON.parse(localStorage.getItem('mcft') || '{}');
 let searchChannels = [];
+let ytUser = JSON.parse(localStorage.getItem('mytuser') || 'null');
 
 let sbOpen = true, section = 'all', q = '', channelFilter = '';
 let modalVid = null, heroVid = null, heroPlaying = false;
 let isFetchingChannels = false;
+let miniVid = null, modalIsPlaying = false;
+let initialFollowSet = new Set(); // channels being followed for first time (skip notifications)
+let navHistory = []; // [{section, q, channelFilter}]
+
+// ===== SHORTVIDS =====
+let shortsVids = JSON.parse(localStorage.getItem('mshortvids') || '[]');
+let shortsFetchTime = parseInt(localStorage.getItem('mshortft') || '0');
+const SHORTS_COOLDOWN = 30 * 60 * 1000;
 
 const PAL = ['#ff6b6b','#ffd93d','#6bcb77','#4d96ff','#ff922b','#cc5de8','#20c997','#f06595','#74c0fc'];
 const HEART_FULL = 'M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z';
@@ -549,11 +733,107 @@ const HEART_OUT = 'M16.5 3c-1.74 0-3.41.81-4.5 2.09C10.91 3.81 9.24 3 7.5 3 4.42
 // ===== THEME =====
 let isDark = localStorage.getItem('mytheme') !== 'light';
 document.body.className = isDark ? 'dark' : 'light';
-
 function toggleTheme() {
   isDark = !isDark;
   localStorage.setItem('mytheme', isDark ? 'dark' : 'light');
   document.body.className = isDark ? 'dark' : 'light';
+}
+
+// ===== YOUTUBE LOGIN =====
+function renderYTUserArea() {
+  const area = document.getElementById('yt-user-area');
+  if (!area) return;
+  if (ytUser) {
+    area.innerHTML = `<div class="yt-user-chip">
+      ${ytUser.thumb ? `<img class="yt-user-av" src="${x(ytUser.thumb)}" alt="">` : `<div class="yt-user-av init" style="background:${ytUser.col}22;color:${ytUser.col}">${(ytUser.name||'?').slice(0,2).toUpperCase()}</div>`}
+      <span class="yt-user-name">${x(ytUser.name||'')}</span>
+    </div>`;
+    document.getElementById('yt-dis-btn').classList.add('vis');
+  } else {
+    area.innerHTML = `<button class="yt-login-btn" onclick="toggleYTPanel()">
+      <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+      התחבר ל-YouTube
+    </button>`;
+    document.getElementById('yt-dis-btn')?.classList.remove('vis');
+  }
+}
+
+function toggleYTPanel() {
+  document.getElementById('yt-panel').classList.toggle('open');
+}
+
+async function connectYT() {
+  const handle = document.getElementById('yt-handle-input').value.trim();
+  if (!handle) { toast('הכנס handle או channel ID'); return; }
+  toast('מחפש ערוץ...');
+  try {
+    let url;
+    if (handle.startsWith('UC') || handle.startsWith('HC')) {
+      url = `https://www.googleapis.com/youtube/v3/channels?part=snippet&id=${encodeURIComponent(handle)}`;
+    } else {
+      const clean = handle.replace(/^@/, '');
+      url = `https://www.googleapis.com/youtube/v3/channels?part=snippet&forHandle=${encodeURIComponent(clean)}`;
+    }
+    const d = await apiGet(url);
+    if (d.items && d.items.length) {
+      const ch = d.items[0];
+      const col = PAL[Math.abs(hsh(ch.snippet.title||'')) % PAL.length];
+      ytUser = {
+        name: ch.snippet.title,
+        thumb: ch.snippet.thumbnails?.default?.url || ch.snippet.thumbnails?.medium?.url || '',
+        channelId: ch.id,
+        col
+      };
+      localStorage.setItem('mytuser', JSON.stringify(ytUser));
+      renderYTUserArea();
+      document.getElementById('yt-panel').classList.remove('open');
+      toast('מחובר כ-' + ytUser.name);
+    } else {
+      toast('לא נמצא ערוץ. נסה שוב.');
+    }
+  } catch(e) { toast('שגיאה: ' + e.message); }
+}
+
+function disconnectYT() {
+  ytUser = null;
+  localStorage.removeItem('mytuser');
+  renderYTUserArea();
+  document.getElementById('yt-panel').classList.remove('open');
+  toast('התנתקת מ-YouTube');
+}
+
+// ===== CHANNEL THUMBNAILS =====
+async function fetchChannelThumbs(channelIds) {
+  const missing = channelIds.filter(id => id && !chThumbCache[id]);
+  if (!missing.length) return;
+  const chunks = [];
+  for (let i = 0; i < missing.length; i += 50) chunks.push(missing.slice(i, i + 50));
+  for (const chunk of chunks) {
+    try {
+      const d = await apiGet(`https://www.googleapis.com/youtube/v3/channels?part=snippet&id=${chunk.join(',')}&maxResults=50`);
+      if (d.items) {
+        for (const item of d.items) {
+          const th = item.snippet?.thumbnails?.default?.url || item.snippet?.thumbnails?.medium?.url || '';
+          if (th) chThumbCache[item.id] = th;
+        }
+        localStorage.setItem('mchth', JSON.stringify(chThumbCache));
+      }
+    } catch(e) {}
+  }
+}
+
+function getChThumb(channelId) {
+  return channelId ? (chThumbCache[channelId] || '') : '';
+}
+
+function mkChAvHTML(channelId, channelName, size = 34, fontSize = 12) {
+  const col = PAL[Math.abs(hsh(channelName || '')) % PAL.length];
+  const init = (channelName || '?').slice(0, 2).toUpperCase();
+  const th = getChThumb(channelId);
+  if (th) {
+    return `<img src="${x(th)}" alt="${x(channelName)}" style="width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span style="display:none;width:${size}px;height:${size}px;border-radius:50%;background:${col}22;color:${col};align-items:center;justify-content:center;font-size:${fontSize}px;font-weight:700">${init}</span>`;
+  }
+  return `<span style="width:${size}px;height:${size}px;border-radius:50%;background:${col}22;color:${col};display:flex;align-items:center;justify-content:center;font-size:${fontSize}px;font-weight:700">${init}</span>`;
 }
 
 // ===== CACHE =====
@@ -562,7 +842,6 @@ function saveVidsCache() {
     localStorage.setItem('mvids', JSON.stringify(vids.slice(0, MAX_VIDS_CACHE)));
     localStorage.setItem('mchids', JSON.stringify(chIdMap));
   } catch(e) {
-    // localStorage might be full — trim and retry
     vids = vids.slice(0, 200);
     try { localStorage.setItem('mvids', JSON.stringify(vids)); } catch(e2) {}
   }
@@ -570,7 +849,6 @@ function saveVidsCache() {
 
 // ===== INIT =====
 window.addEventListener('DOMContentLoaded', () => {
-  // Immediately render from cache if available
   if (vids.length > 0) {
     buildChMap();
     buildSBChannels();
@@ -578,19 +856,18 @@ window.addEventListener('DOMContentLoaded', () => {
   } else {
     showSkels();
   }
-
   renderNotifs();
   updateBadge();
+  updateQuotaDisplay();
+  renderYTUserArea();
 
-  // Then fetch fresh content
   if (followed.size > 0) {
     fetchFollowedChannelsVideos(false);
   } else {
     searchYouTube('מוזיקה ישראלית חדשות בידור ספורט');
   }
-
+  fetchDiscoveryContent();
   setInterval(refreshFollowedChannels, 5 * 60 * 1000);
-  // Fetch shorts recommendations in background
   fetchShortsRecommendations();
 
   document.addEventListener('click', e => {
@@ -601,65 +878,99 @@ window.addEventListener('DOMContentLoaded', () => {
     if (!document.getElementById('search-area').contains(e.target))
       document.getElementById('search-drop').classList.remove('show');
     document.getElementById('ctx-menu').style.display = 'none';
+    const yp = document.getElementById('yt-panel');
+    const ya = document.getElementById('yt-user-area');
+    if (yp.classList.contains('open') && !yp.contains(e.target) && !ya.contains(e.target))
+      yp.classList.remove('open');
   });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); document.getElementById('yt-panel').classList.remove('open'); } });
 });
 
-// ===== DATA FETCHING =====
+// ===== DISCOVERY CONTENT =====
+async function fetchDiscoveryContent() {
+  // Fetch trending Israeli content for home page discovery
+  if (vids.length > 100) return; // already have plenty
+  try {
+    const queries = ['ישראל 2024 2025', 'ויראל ישראל', 'טלוויזיה ישראלית'];
+    for (const q2 of queries.slice(0, 1)) {
+      const d = await apiGet(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=30&q=${encodeURIComponent(q2)}&type=video&regionCode=${REGION}&relevanceLanguage=${LANG}&order=viewCount`);
+      if (d.items) {
+        const fetched = d.items.filter(i => i.id?.videoId).map(i => ({
+          id: i.id.videoId, title: i.snippet.title, channel: i.snippet.channelTitle,
+          channelId: i.snippet.channelId, thumb: i.snippet.thumbnails.high?.url || i.snippet.thumbnails.medium?.url,
+          desc: i.snippet.description, publishedAt: i.snippet.publishedAt, isDiscovery: true
+        }));
+        mergeVids(fetched);
+        // Fetch thumbnails for discovered channels
+        const ids = [...new Set(fetched.map(v => v.channelId).filter(Boolean))];
+        fetchChannelThumbs(ids);
+      }
+    }
+    buildChMap(); saveVidsCache(); renderAll();
+  } catch(e) {}
+}
 
+// ===== DATA FETCHING =====
 async function searchYouTube(query = 'ישראל') {
   showSkels();
   searchChannels = [];
   try {
-    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&q=${encodeURIComponent(query)}&type=video&regionCode=${REGION}&relevanceLanguage=${LANG}&key=${API_KEY}`;
-    const r1 = await fetch(url);
-    const d1 = await r1.json();
+    const d1 = await apiGet(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&q=${encodeURIComponent(query)}&type=video&regionCode=${REGION}&relevanceLanguage=${LANG}`);
     if (d1.error) throw new Error(d1.error.message);
 
-    const fetched = d1.items
-      .filter(item => item.id?.videoId)
-      .map(item => ({
-        id: item.id.videoId,
-        title: item.snippet.title,
-        channel: item.snippet.channelTitle,
-        channelId: item.snippet.channelId,
-        thumb: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.medium?.url,
-        desc: item.snippet.description,
-        publishedAt: item.snippet.publishedAt
-      }));
+    const fetched = d1.items.filter(item => item.id?.videoId).map(item => ({
+      id: item.id.videoId, title: item.snippet.title, channel: item.snippet.channelTitle,
+      channelId: item.snippet.channelId, thumb: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.medium?.url,
+      desc: item.snippet.description, publishedAt: item.snippet.publishedAt
+    }));
 
-    // Merge fetched into vids (avoid duplicates)
     mergeVids(fetched);
 
-    // Also search channels
+    // Search channels too
     try {
-      const r2 = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${encodeURIComponent(query)}&type=channel&regionCode=${REGION}&key=${API_KEY}`);
-      const d2 = await r2.json();
+      const d2 = await apiGet(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=8&q=${encodeURIComponent(query)}&type=channel&regionCode=${REGION}`);
       if (!d2.error) {
         searchChannels = d2.items.map(item => ({
-          id: item.id.channelId,
-          name: item.snippet.title,
-          desc: item.snippet.description,
-          thumb: item.snippet.thumbnails?.default?.url
+          id: item.id.channelId, name: item.snippet.title, desc: item.snippet.description,
+          thumb: item.snippet.thumbnails?.default?.url || item.snippet.thumbnails?.medium?.url
         }));
-        // Save discovered channel IDs
-        for (const ch of searchChannels) {
-          if (ch.id && ch.name) chIdMap[ch.name] = ch.id;
-        }
+        for (const ch of searchChannels) if (ch.id && ch.name) { chIdMap[ch.name] = ch.id; if (ch.thumb) chThumbCache[ch.id] = ch.thumb; }
+        // Also suggest related channels based on search
+        await fetchRelatedChannels(query);
       }
     } catch(e2) {}
 
-    buildChMap();
-    saveVidsCache();
-    buildSBChannels();
-    checkNewVids();
-    renderAll();
-  } catch(e) {
-    showErr('שגיאה: ' + e.message);
+    // Fetch channel thumbnails for videos
+    const chIds = [...new Set(fetched.map(v => v.channelId).filter(Boolean))];
+    fetchChannelThumbs(chIds);
+
+    buildChMap(); saveVidsCache(); buildSBChannels(); checkNewVids(); renderAll();
+  } catch(e) { showErr('שגיאה: ' + e.message); }
+}
+
+// Fetch related/related channels based on the search topic
+async function fetchRelatedChannels(query) {
+  // Extract potential channel names from search results and also use query terms
+  const words = query.split(/\s+/).filter(w => w.length > 2);
+  const relatedQueries = words.map(w => w + ' ישראל').slice(0, 2);
+  for (const rq of relatedQueries) {
+    try {
+      const d = await apiGet(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=5&q=${encodeURIComponent(rq)}&type=channel`);
+      if (!d.error && d.items) {
+        const relChannels = d.items.map(i => ({
+          id: i.id.channelId, name: i.snippet.title, desc: i.snippet.description,
+          thumb: i.snippet.thumbnails?.default?.url
+        }));
+        // Add to searchChannels as related suggestions (deduplicated)
+        for (const rc of relChannels) {
+          if (!searchChannels.find(c => c.id === rc.id)) searchChannels.push(rc);
+          if (rc.id && rc.name) { chIdMap[rc.name] = rc.id; if (rc.thumb) chThumbCache[rc.id] = rc.thumb; }
+        }
+      }
+    } catch(e) {}
   }
 }
 
-// Fetch videos for a single channel — paginated up to ~150
 async function fetchChannelVideos(chId, chName, force = false) {
   if (!chId) return [];
   const lastFetch = chFetchTimes[chId] || 0;
@@ -667,52 +978,43 @@ async function fetchChannelVideos(chId, chName, force = false) {
   try {
     let all = [], pageToken = '', pages = 0;
     do {
-      const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&channelId=${chId}&type=video&order=date${pageToken ? '&pageToken=' + pageToken : ''}&key=${API_KEY}`;
-      const r = await fetch(url); const d = await r.json();
+      const d = await apiGet(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&channelId=${chId}&type=video&order=date${pageToken ? '&pageToken=' + pageToken : ''}`);
       if (d.error || !d.items) break;
       all = all.concat(d.items.filter(i => i.id?.videoId).map(i => ({
-        id: i.id.videoId,
-        title: i.snippet.title,
-        channel: i.snippet.channelTitle || chName,
+        id: i.id.videoId, title: i.snippet.title, channel: i.snippet.channelTitle || chName,
         channelId: i.snippet.channelId || chId,
         thumb: i.snippet.thumbnails.high?.url || i.snippet.thumbnails.medium?.url || `https://img.youtube.com/vi/${i.id.videoId}/hqdefault.jpg`,
-        desc: i.snippet.description,
-        publishedAt: i.snippet.publishedAt
+        desc: i.snippet.description, publishedAt: i.snippet.publishedAt
       })));
       pageToken = d.nextPageToken || '';
       pages++;
-    } while (pageToken && pages < 3); // max 3 pages = ~150 videos
+    } while (pageToken && pages < 3);
     mergeVids(all);
     if (chName && chId) chIdMap[chName] = chId;
     for (const v of all) if (v.channel && v.channelId) chIdMap[v.channel] = v.channelId;
     chFetchTimes[chId] = Date.now();
     localStorage.setItem('mcft', JSON.stringify(chFetchTimes));
     buildChMap(); saveVidsCache();
+    // Fetch channel thumbnail
+    fetchChannelThumbs([chId]);
     return all;
   } catch(e) { return []; }
 }
 
-// Merge new videos into vids array without duplicates
 function mergeVids(newVids) {
   const existingIds = new Set(vids.map(v => v.id));
   for (const v of newVids) {
-    if (!existingIds.has(v.id)) {
-      vids.push(v);
-      existingIds.add(v.id);
-    }
+    if (!existingIds.has(v.id)) { vids.push(v); existingIds.add(v.id); }
   }
-  // Keep newest / most relevant first — limit total size
   if (vids.length > MAX_VIDS_CACHE) vids = vids.slice(0, MAX_VIDS_CACHE);
 }
 
-// Fetch all followed channels (called on load and periodically)
 async function fetchFollowedChannelsVideos(force = false) {
   if (isFetchingChannels) return;
   isFetchingChannels = true;
   const channels = [...followed].filter(ch => !blockedChannels.includes(ch));
   if (!channels.length) { isFetchingChannels = false; return; }
 
-  // Show loading indicator
   const ct = document.getElementById('content');
   let indicator = document.getElementById('fetch-indicator');
   if (!indicator) {
@@ -730,10 +1032,8 @@ async function fetchFollowedChannelsVideos(force = false) {
       const res = await fetchChannelVideos(chId, ch, force);
       if (res.length) fetchedAny = true;
     } else {
-      // Try to discover the channel ID via search
       try {
-        const r = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${encodeURIComponent(ch)}&type=channel&key=${API_KEY}`);
-        const d = await r.json();
+        const d = await apiGet(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${encodeURIComponent(ch)}&type=channel`);
         if (!d.error && d.items?.length) {
           const found = d.items[0];
           chIdMap[ch] = found.id.channelId;
@@ -745,34 +1045,20 @@ async function fetchFollowedChannelsVideos(force = false) {
     }
   }
 
-  // If no followed channels had IDs yet, fall back to general search
-  if (!fetchedAny && vids.length === 0) {
-    isFetchingChannels = false;
-    searchYouTube('מוזיקה ישראלית חדשות');
-    return;
-  }
-
+  if (!fetchedAny && vids.length === 0) { isFetchingChannels = false; searchYouTube('מוזיקה ישראלית חדשות'); return; }
   isFetchingChannels = false;
   indicator?.remove();
-  buildChMap();
-  buildSBChannels();
-  checkNewVids();
-  renderAll();
+  buildChMap(); buildSBChannels(); checkNewVids(); renderAll();
 }
 
 async function refreshFollowedChannels() {
   if (followed.size === 0) return;
-  // Silent background refresh — only fetch channels not recently refreshed
   const channels = [...followed].filter(ch => !blockedChannels.includes(ch));
   for (const ch of channels) {
     const chId = chIdMap[ch];
     if (!chId) continue;
     const res = await fetchChannelVideos(chId, ch, false);
-    if (res.length) {
-      buildChMap();
-      checkNewVids();
-      renderAll();
-    }
+    if (res.length) { buildChMap(); checkNewVids(); renderAll(); }
   }
 }
 
@@ -787,14 +1073,14 @@ function buildChMap() {
   }
 }
 
+function getSortedChannels() {
+  return Object.keys(chMap).sort((a, b) => (chWatches[b] || 0) - (chWatches[a] || 0));
+}
+
 function recordWatch(ch) {
   if (!ch) return;
   chWatches[ch] = (chWatches[ch] || 0) + 1;
   localStorage.setItem('mcw', JSON.stringify(chWatches));
-}
-
-function getSortedChannels() {
-  return Object.keys(chMap).sort((a, b) => (chWatches[b] || 0) - (chWatches[a] || 0));
 }
 
 function addToWatched(vid) {
@@ -814,7 +1100,6 @@ function renderHero() {
   const candidates = getRec().map(id => vids.find(vv => vv.id === id))
     .filter(v => v && !blockedVids.includes(v.id) && !blockedChannels.includes(v.channel));
   if (!candidates.length) { heroEl.style.display = 'none'; _stopHeroTimer(); return; }
-  // Pick up to 5, one per channel
   const seen = new Set(); heroVids = [];
   for (const v of candidates) { if (!seen.has(v.channel)) { seen.add(v.channel); heroVids.push(v); } if (heroVids.length >= 5) break; }
   if (!heroVids.length) heroVids = candidates.slice(0, 5);
@@ -835,12 +1120,12 @@ function _loadHeroSlide(i) {
   const col = PAL[Math.abs(hsh(v.channel || '')) % PAL.length];
   const av = document.getElementById('hero-ch-av');
   av.style.background = col + '22'; av.style.color = col;
-  av.textContent = (v.channel || '?').slice(0, 2).toUpperCase();
+  const th = getChThumb(v.channelId);
+  av.innerHTML = th ? `<img src="${x(th)}" onerror="this.remove()">` : (v.channel || '?').slice(0, 2).toUpperCase();
   const wrap = document.getElementById('hero-player-wrap');
   wrap.classList.remove('hero-playing'); wrap.querySelector('iframe')?.remove();
   document.getElementById('hero-play-btn').style.display = '';
   updateHeroLike(); updateHeroFollow();
-  // dots
   const dotsEl = document.getElementById('hero-dots'); if (!dotsEl) return;
   dotsEl.innerHTML = '';
   heroVids.forEach((_, di) => {
@@ -852,7 +1137,6 @@ function _loadHeroSlide(i) {
 
 function heroNext() { _loadHeroSlide((heroIdx + 1) % heroVids.length); _resetHeroTimer(); }
 function heroPrev() { _loadHeroSlide((heroIdx - 1 + heroVids.length) % heroVids.length); _resetHeroTimer(); }
-
 function _startHeroTimer() {
   _stopHeroTimer();
   if (heroVids.length < 2) return;
@@ -883,15 +1167,9 @@ function heroToggleLike() {
   const id = heroVid.id;
   likes.has(id) ? likes.delete(id) : likes.add(id);
   localStorage.setItem('ml', JSON.stringify([...likes]));
-  updateHeroLike();
-  // Update cards in DOM without re-rendering
-  updateLikeInDOM(id);
+  updateHeroLike(); updateLikeInDOM(id);
 }
-
-function heroToggleFollow() {
-  if (heroVid?.channel) { toggleFollow(heroVid.channel); updateHeroFollow(); }
-}
-
+function heroToggleFollow() { if (heroVid?.channel) { toggleFollow(heroVid.channel); updateHeroFollow(); } }
 function updateHeroLike() {
   if (!heroVid) return;
   const liked = likes.has(heroVid.id);
@@ -899,7 +1177,6 @@ function updateHeroLike() {
   document.getElementById('hero-heart').setAttribute('d', liked ? HEART_FULL : HEART_OUT);
   document.getElementById('hero-like-txt').textContent = liked ? 'הסר מאהבתי' : 'אהבתי';
 }
-
 function updateHeroFollow() {
   if (!heroVid) return;
   const isF = followed.has(heroVid.channel);
@@ -915,21 +1192,23 @@ function toggleFollow(ch) {
   } else {
     followed.add(ch);
     toast('עוקב עכשיו אחרי ' + ch);
-    // Save current videos as baseline for new-vid detection
-    if (chMap[ch] && !chLastVids[ch]) {
-      chLastVids[ch] = [...(chMap[ch] || [])];
-      localStorage.setItem('mlv', JSON.stringify(chLastVids));
-    }
-    // Fetch this channel's videos
+    initialFollowSet.add(ch); // Mark to skip notifications on first fetch
     const chId = chIdMap[ch];
     if (chId) {
       fetchChannelVideos(chId, ch, true).then(res => {
-        if (res.length) { buildChMap(); buildSBChannels(); renderAll(); }
+        if (res.length) {
+          buildChMap();
+          // Set baseline AFTER fetch to avoid spurious notifications
+          chLastVids[ch] = [...(chMap[ch] || [])];
+          localStorage.setItem('mlv', JSON.stringify(chLastVids));
+          initialFollowSet.delete(ch);
+          buildSBChannels(); renderAll();
+        } else {
+          initialFollowSet.delete(ch);
+        }
       });
     } else {
-      // Discover channel ID
-      fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${encodeURIComponent(ch)}&type=channel&key=${API_KEY}`)
-        .then(r => r.json())
+      apiGet(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${encodeURIComponent(ch)}&type=channel`)
         .then(d => {
           if (!d.error && d.items?.length) {
             const chId2 = d.items[0].id.channelId;
@@ -939,14 +1218,19 @@ function toggleFollow(ch) {
           }
         })
         .then(res => {
-          if (res?.length) { buildChMap(); buildSBChannels(); renderAll(); }
+          if (res?.length) {
+            buildChMap();
+            chLastVids[ch] = [...(chMap[ch] || [])];
+            localStorage.setItem('mlv', JSON.stringify(chLastVids));
+            buildSBChannels(); renderAll();
+          }
+          initialFollowSet.delete(ch);
         })
-        .catch(() => {});
+        .catch(() => { initialFollowSet.delete(ch); });
     }
   }
   localStorage.setItem('mf', JSON.stringify([...followed]));
-  buildSBChannels();
-  renderAll();
+  buildSBChannels(); renderAll();
   if (modalVid) updateModalFollow();
 }
 
@@ -954,11 +1238,11 @@ function toggleFollow(ch) {
 function checkNewVids() {
   let found = 0;
   for (const ch of followed) {
-    if (blockedChannels.includes(ch)) continue;
+    if (blockedChannels.includes(ch) || initialFollowSet.has(ch)) continue;
     const cur = chMap[ch] || [], last = chLastVids[ch] || [];
     const newIds = cur.filter(id => !last.includes(id) && !blockedVids.includes(id));
     for (const id of newIds) {
-      const v = vids.find(x => x.id === id);
+      const v = vids.find(xx => xx.id === id);
       addNotif(ch, v ? (v.title || 'סרטון חדש') : 'סרטון חדש', id);
       found++;
     }
@@ -970,7 +1254,7 @@ function checkNewVids() {
 function getNewVidIds() {
   const r = [];
   for (const ch of followed) {
-    if (blockedChannels.includes(ch)) continue;
+    if (blockedChannels.includes(ch) || initialFollowSet.has(ch)) continue;
     const cur = chMap[ch] || [], last = chLastVids[ch] || [];
     cur.filter(id => !last.includes(id) && !blockedVids.includes(id)).forEach(id => r.push(id));
   }
@@ -984,22 +1268,18 @@ function addNotif(ch, title, vidId) {
 }
 
 function renderNotifs() {
-  const list = document.getElementById('notif-list');
-  if (!list) return;
+  const list = document.getElementById('notif-list'); if (!list) return;
   list.innerHTML = '';
-  if (!notifications.length) {
-    list.innerHTML = '<div class="notif-empty">אין התראות עדיין<br><br>עקוב אחרי ערוץ לקבלת התראות.</div>';
-    return;
-  }
+  if (!notifications.length) { list.innerHTML = '<div class="notif-empty">אין התראות עדיין<br><br>עקוב אחרי ערוץ לקבלת התראות.</div>'; return; }
   for (const n of notifications) {
     const col = PAL[Math.abs(hsh(n.channel || '')) % PAL.length];
+    const chId = chIdMap[n.channel || ''];
+    const th = getChThumb(chId);
     const el = document.createElement('div');
     el.className = 'notif-item' + (n.read ? '' : ' unread');
-    el.innerHTML = `<div class="notif-av" style="background:${col}22;color:${col}">${(n.channel || '?').slice(0, 2).toUpperCase()}</div><div class="notif-body"><div class="notif-txt"><strong>${x(n.channel)}</strong>: ${x(n.title)}</div><div class="notif-time">${fmtTime(n.time)}</div></div>`;
+    el.innerHTML = `<div class="notif-av" style="background:${col}22;color:${col}">${th ? `<img src="${x(th)}" onerror="this.remove()">` : (n.channel || '?').slice(0, 2).toUpperCase()}</div><div class="notif-body"><div class="notif-txt"><strong>${x(n.channel)}</strong>: ${x(n.title)}</div><div class="notif-time">${fmtTime(n.time)}</div></div>`;
     el.onclick = () => {
-      n.read = true;
-      localStorage.setItem('mn', JSON.stringify(notifications));
-      updateBadge(); renderNotifs();
+      n.read = true; localStorage.setItem('mn', JSON.stringify(notifications)); updateBadge(); renderNotifs();
       const v = vids.find(vv => vv.id === n.vidId);
       if (v) { document.getElementById('notif-panel').classList.remove('open'); openModal(v); }
     };
@@ -1012,17 +1292,68 @@ function updateBadge() { const b = document.getElementById('notif-badge'); if (!
 function toggleNotifPanel() { document.getElementById('notif-panel').classList.toggle('open'); }
 function fmtTime(iso) { if (!iso) return ''; const d = Date.now() - new Date(iso).getTime(); if (d < 60000) return 'עכשיו'; if (d < 3600000) return `לפני ${Math.floor(d / 60000)} דק'`; if (d < 86400000) return `לפני ${Math.floor(d / 3600000)} שע'`; return `לפני ${Math.floor(d / 86400000)} ימים`; }
 
+function fmtDate(iso) {
+  if (!iso) return '';
+  const d = new Date(iso);
+  const diff = Date.now() - d.getTime();
+  if (diff < 3600000) return `לפני ${Math.floor(diff / 60000)} דקות`;
+  if (diff < 86400000) return `לפני ${Math.floor(diff / 3600000)} שעות`;
+  if (diff < 7 * 86400000) return `לפני ${Math.floor(diff / 86400000)} ימים`;
+  if (diff < 30 * 86400000) return `לפני ${Math.floor(diff / 7 / 86400000)} שבועות`;
+  if (diff < 365 * 86400000) return `לפני ${Math.floor(diff / 30 / 86400000)} חודשים`;
+  return `לפני ${Math.floor(diff / 365 / 86400000)} שנים`;
+}
+
+// ===== MINI PLAYER =====
+function showMiniPlayer(v) {
+  miniVid = v;
+  const mp = document.getElementById('mini-player');
+  const mpVid = document.getElementById('mp-vid');
+  document.getElementById('mp-title').textContent = v.title || 'סרטון YouTube';
+  mpVid.innerHTML = `<iframe src="https://www.youtube.com/embed/${v.id}?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+  mp.classList.add('show');
+}
+
+function closeMiniPlayer() {
+  const mp = document.getElementById('mini-player');
+  mp.classList.remove('show');
+  document.getElementById('mp-vid').innerHTML = '';
+  miniVid = null;
+}
+
+function expandMiniPlayer() {
+  if (!miniVid) return;
+  const v = miniVid;
+  closeMiniPlayer();
+  openModal(v);
+}
+
+function stopAnyCurrentPlayback() {
+  // Stop mini player if running
+  if (miniVid) closeMiniPlayer();
+  // Also clear hero if playing
+  if (heroPlaying) {
+    heroPlaying = false;
+    const wrap = document.getElementById('hero-player-wrap');
+    wrap?.classList.remove('hero-playing');
+    wrap?.querySelector('iframe')?.remove();
+    _startHeroTimer();
+  }
+}
+
 // ===== MODAL =====
 function openModal(v) {
-  modalVid = v;
-  recordWatch(v.channel);
-  addToWatched(v);
+  stopAnyCurrentPlayback();
+  modalVid = v; modalIsPlaying = true;
+  recordWatch(v.channel); addToWatched(v);
   document.getElementById('vmodal-player').innerHTML = `<iframe src="https://www.youtube.com/embed/${v.id}?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
   document.getElementById('vmodal-title').textContent = v.title || 'סרטון YouTube';
+  document.getElementById('vmodal-date').textContent = v.publishedAt ? 'עלה ב-' + fmtDate(v.publishedAt) : '';
   const col = PAL[Math.abs(hsh(v.channel || '')) % PAL.length];
   const av = document.getElementById('vmodal-ch-av');
   av.style.background = col + '22'; av.style.color = col;
-  av.textContent = (v.channel || '?').slice(0, 2).toUpperCase();
+  const th = getChThumb(v.channelId);
+  av.innerHTML = th ? `<img src="${x(th)}" onerror="this.style.background='${col}22';this.outerHTML='<span style=\\"display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:11px;font-weight:700\\">${(v.channel||'?').slice(0,2).toUpperCase()}</span>'">` : `<span style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;font-size:11px;font-weight:700">${(v.channel||'?').slice(0,2).toUpperCase()}</span>`;
   document.getElementById('vmodal-ch-name').textContent = v.channel || 'ערוץ';
   updateModalLike(); updateModalFollow();
   const descEl = document.getElementById('vmodal-desc');
@@ -1045,11 +1376,24 @@ async function fetchDesc(v) {
   return `סרטון מאת ${v.channel || 'ערוץ YouTube'}.`;
 }
 
+function minimizeModal() {
+  if (!modalVid) { closeModal(); return; }
+  const v = modalVid;
+  // Close modal without stopping video
+  document.getElementById('vmodal').classList.remove('open');
+  document.body.style.overflow = '';
+  // Transfer to mini player
+  showMiniPlayer(v);
+  modalVid = null; modalIsPlaying = false;
+  // Clear modal player AFTER mini player is shown
+  setTimeout(() => { document.getElementById('vmodal-player').innerHTML = ''; }, 100);
+}
+
 function closeModal() {
   document.getElementById('vmodal').classList.remove('open');
   document.getElementById('vmodal-player').innerHTML = '';
   document.body.style.overflow = '';
-  modalVid = null;
+  modalVid = null; modalIsPlaying = false;
 }
 
 function handleModalBg(e) { if (e.target.id === 'vmodal') closeModal(); }
@@ -1062,8 +1406,7 @@ function modalToggleLike() {
   const id = modalVid.id;
   likes.has(id) ? likes.delete(id) : likes.add(id);
   localStorage.setItem('ml', JSON.stringify([...likes]));
-  updateModalLike();
-  updateLikeInDOM(id);
+  updateModalLike(); updateLikeInDOM(id);
   if (heroVid && heroVid.id === id) updateHeroLike();
 }
 
@@ -1083,42 +1426,31 @@ function updateModalFollow() {
   document.getElementById('modal-follow-txt').textContent = isF ? 'מפסיק לעקוב' : 'עקוב אחרי הערוץ';
 }
 
-// ===== LIKE (no re-render) =====
-// Update all card DOM elements for a video ID after a like change
+// ===== LIKE DOM UPDATE =====
 function updateLikeInDOM(id) {
   const isLiked = likes.has(id);
   document.querySelectorAll(`.liked-btn[data-id="${id}"]`).forEach(btn => {
     btn.classList.toggle('on', isLiked);
     btn.querySelector('path').setAttribute('d', isLiked ? HEART_FULL : HEART_OUT);
-    // Toggle is-liked on the parent vcard
     const card = btn.closest('.vcard');
     if (card) {
       card.classList.toggle('is-liked', isLiked);
-      // Show/hide the liked label in vinfo
       const vtxt = card.querySelector('.vtxt');
       if (vtxt) {
         let label = vtxt.querySelector('.vlabel');
-        if (isLiked && !label) {
-          label = document.createElement('div');
-          label.className = 'vlabel';
-          label.innerHTML = `<svg viewBox="0 0 24 24"><path d="${HEART_FULL}"/></svg>אהבתי`;
-          vtxt.appendChild(label);
-        } else if (!isLiked && label) {
-          label.remove();
-        }
-        // Show/hide liked corner badge
+        if (isLiked && !label) { label = document.createElement('div'); label.className = 'vlabel'; label.innerHTML = `<svg viewBox="0 0 24 24"><path d="${HEART_FULL}"/></svg>אהבתי`; vtxt.appendChild(label); }
+        else if (!isLiked && label) label.remove();
         const corner = card.querySelector('.liked-corner');
         if (corner) corner.style.display = isLiked ? 'flex' : 'none';
       }
     }
   });
-  // If we're on the 'liked' section, we do need to re-render to add/remove the card
   if (section === 'liked' && !document.getElementById('vmodal').classList.contains('open')) {
     setTimeout(renderAll, 120);
   }
 }
 
-function toggleLike(id, btn) {
+function toggleLike(id) {
   likes.has(id) ? likes.delete(id) : likes.add(id);
   localStorage.setItem('ml', JSON.stringify([...likes]));
   toast(likes.has(id) ? 'נוסף לאהבתי' : 'הוסר מאהבתי');
@@ -1129,16 +1461,11 @@ function toggleLike(id, btn) {
 
 // ===== CONTEXT MENU =====
 function showCtx(e, type, vId, chName) {
-  e.preventDefault();
-  e.stopPropagation();
-  const ctx = document.getElementById('ctx-menu');
-  ctx.innerHTML = '';
-
+  e.preventDefault(); e.stopPropagation();
+  const ctx = document.getElementById('ctx-menu'); ctx.innerHTML = '';
   if (type === 'video') {
     mkCtxItem(ctx, '<svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>', 'אל תציג יותר סרטון זה', () => blockVid(vId));
-    if (chName) {
-      mkCtxItem(ctx, '<svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>', 'אל תציג תכנים מערוץ זה', () => blockChannel(chName));
-    }
+    if (chName) mkCtxItem(ctx, '<svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>', 'אל תציג תכנים מערוץ זה', () => blockChannel(chName));
     const vObj = vids.find(v => v.id === vId);
     if (vObj) {
       const isLiked = likes.has(vId);
@@ -1152,60 +1479,15 @@ function showCtx(e, type, vId, chName) {
     mkCtxSep(ctx);
     mkCtxItem(ctx, '<svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>', 'אל תציג תכנים מערוץ זה', () => blockChannel(chName));
   }
-
-  // Smart positioning — use clientX/Y for fixed elements
   const menuH = ctx.children.length * 40 + 16;
   const top = Math.min(e.clientY, window.innerHeight - menuH - 8);
   const left = Math.min(e.clientX, window.innerWidth - 220);
-  ctx.style.left = left + 'px';
-  ctx.style.top = top + 'px';
-  ctx.style.display = 'block';
+  ctx.style.left = left + 'px'; ctx.style.top = top + 'px'; ctx.style.display = 'block';
 }
-
-function mkCtxItem(ctx, iconSvg, label, onClick) {
-  const el = document.createElement('div');
-  el.className = 'ctx-item';
-  el.innerHTML = iconSvg + label;
-  el.onclick = onClick;
-  ctx.appendChild(el);
-}
-
-function mkCtxSep(ctx) {
-  const sep = document.createElement('div');
-  sep.className = 'ctx-sep';
-  ctx.appendChild(sep);
-}
-
-function blockVid(id) {
-  if (!blockedVids.includes(id)) blockedVids.push(id);
-  localStorage.setItem('mbv', JSON.stringify(blockedVids));
-  toast('הסרטון הוסתר.');
-  document.getElementById('ctx-menu').style.display = 'none';
-  renderAll();
-}
-
-function blockChannel(ch) {
-  if (!blockedChannels.includes(ch)) blockedChannels.push(ch);
-  localStorage.setItem('mbc', JSON.stringify(blockedChannels));
-  if (followed.has(ch)) { followed.delete(ch); localStorage.setItem('mf', JSON.stringify([...followed])); }
-  toast('הערוץ הוסתר.');
-  document.getElementById('ctx-menu').style.display = 'none';
-  if (channelFilter === ch) setSection('all', document.getElementById('n-all'));
-  else { buildSBChannels(); renderAll(); }
-}
-
-// ===== INLINE PLAY =====
-function playInCard(v, thumbEl) {
-  if (thumbEl.classList.contains('playing')) return;
-  thumbEl.classList.add('playing');
-  const iframe = document.createElement('iframe');
-  iframe.src = `https://www.youtube.com/embed/${v.id}?autoplay=1&rel=0`;
-  iframe.allow = 'autoplay; encrypted-media';
-  iframe.allowFullscreen = true;
-  thumbEl.appendChild(iframe);
-  recordWatch(v.channel);
-  addToWatched(v);
-}
+function mkCtxItem(ctx, iconSvg, label, onClick) { const el = document.createElement('div'); el.className = 'ctx-item'; el.innerHTML = iconSvg + label; el.onclick = onClick; ctx.appendChild(el); }
+function mkCtxSep(ctx) { const sep = document.createElement('div'); sep.className = 'ctx-sep'; ctx.appendChild(sep); }
+function blockVid(id) { if (!blockedVids.includes(id)) blockedVids.push(id); localStorage.setItem('mbv', JSON.stringify(blockedVids)); toast('הסרטון הוסתר.'); document.getElementById('ctx-menu').style.display = 'none'; renderAll(); }
+function blockChannel(ch) { if (!blockedChannels.includes(ch)) blockedChannels.push(ch); localStorage.setItem('mbc', JSON.stringify(blockedChannels)); if (followed.has(ch)) { followed.delete(ch); localStorage.setItem('mf', JSON.stringify([...followed])); } toast('הערוץ הוסתר.'); document.getElementById('ctx-menu').style.display = 'none'; if (channelFilter === ch) setSection('all', document.getElementById('n-all')); else { buildSBChannels(); renderAll(); } }
 
 // ===== RECOMMENDATIONS =====
 function getRec() {
@@ -1216,18 +1498,98 @@ function getRec() {
   return picks;
 }
 
+// ===== SHORTS =====
+async function fetchShortsRecommendations() {
+  if (Date.now() - shortsFetchTime < SHORTS_COOLDOWN) return;
+  const topChannels = Object.entries(chWatches).sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>e[0]);
+  const queries = [];
+  if (topChannels.length) queries.push(`${topChannels[0]} shorts`);
+  queries.push('שורטסים ישראל', '#shorts ישראל');
+  const seen = new Set(shortsVids.map(v => v.id));
+  let fetched = [];
+  for (const q2 of queries.slice(0, 2)) {
+    try {
+      const d = await apiGet(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&q=${encodeURIComponent(q2)}&type=video&videoDuration=short&regionCode=${REGION}&relevanceLanguage=${LANG}`);
+      if (!d.error && d.items) {
+        for (const item of d.items) {
+          if (!item.id?.videoId || seen.has(item.id.videoId)) continue;
+          fetched.push({ id: item.id.videoId, title: item.snippet.title, channel: item.snippet.channelTitle, channelId: item.snippet.channelId, thumb: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.medium?.url, desc: item.snippet.description, publishedAt: item.snippet.publishedAt, isShort: true });
+          seen.add(item.id.videoId);
+        }
+      }
+    } catch(e) {}
+  }
+  if (fetched.length) {
+    shortsVids = [...fetched, ...shortsVids].slice(0, 60);
+    shortsFetchTime = Date.now();
+    localStorage.setItem('mshortvids', JSON.stringify(shortsVids));
+    localStorage.setItem('mshortft', String(shortsFetchTime));
+  }
+}
+
+// Play short inline in the card (no modal)
+let currentShortCard = null;
+function playShortInline(v, card) {
+  // Stop any other inline short
+  if (currentShortCard && currentShortCard !== card) {
+    const old = currentShortCard.querySelector('.short-inline-player');
+    if (old) old.remove();
+    currentShortCard = null;
+  }
+  // Stop any current modal/mini
+  stopAnyCurrentPlayback();
+  currentShortCard = card;
+  const thumbEl = card.querySelector('.short-thumb');
+  // Remove existing player if any
+  thumbEl.querySelector('.short-inline-player')?.remove();
+  const wrap = document.createElement('div'); wrap.className = 'short-inline-player';
+  wrap.innerHTML = `<iframe src="https://www.youtube.com/embed/${v.id}?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+  const closeBtn = document.createElement('button'); closeBtn.className = 'short-close-btn';
+  closeBtn.innerHTML = '<svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>';
+  closeBtn.onclick = e => { e.stopPropagation(); wrap.remove(); if (currentShortCard === card) currentShortCard = null; };
+  wrap.appendChild(closeBtn);
+  thumbEl.appendChild(wrap);
+  recordWatch(v.channel); addToWatched(v);
+}
+
+function renderShortsSection(ct) {
+  const combined = shortsVids.filter(v => !blockedVids.includes(v.id) && !blockedChannels.includes(v.channel));
+  const fetchNeeded = Date.now() - shortsFetchTime > SHORTS_COOLDOWN;
+  if (!combined.length && !fetchNeeded) { ct.appendChild(mkEmpty('אין Shorts זמינים', 'מרענן...')); fetchShortsRecommendations().then(() => renderShortsSection(ct)); return; }
+  if (fetchNeeded) fetchShortsRecommendations().then(() => { if (section === 'shorts') renderShortsSection(document.getElementById('content')); });
+  if (!combined.length) {
+    const ind = document.createElement('div'); ind.className = 'fetch-indicator';
+    ind.innerHTML = `<svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg> טוען Shorts...`;
+    ct.appendChild(ind); return;
+  }
+  const sec = document.createElement('div'); sec.className = 'section';
+  sec.innerHTML = `<div class="sec-hdr"><div class="sec-title"><div class="sec-ico" style="background:#ff000022;color:#ff0000"><svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.84 1.55V6.79a4.85 4.85 0 01-1.07-.1z"/></svg></div>Shorts מומלצים בשבילך</div><span class="sec-count">${combined.length} שורטסים</span></div>`;
+  const row = document.createElement('div'); row.className = 'shorts-row';
+  combined.forEach((v, i) => {
+    const el = mkShortCard(v, i);
+    row.appendChild(el);
+  });
+  sec.appendChild(row); ct.appendChild(sec);
+}
+
+function mkShortCard(v, i) {
+  const el = document.createElement('div'); el.className = 'short-card'; el.style.animationDelay = (i * 20) + 'ms';
+  el.innerHTML = `<div class="short-thumb"><img src="${v.thumb}" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${v.id}/default.jpg'" alt="${x(v.title)}"><div class="splay"><div class="splay-c"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div><div class="short-badge">Shorts</div></div><div class="short-info"><div class="short-title">${x(v.title)}</div><div class="short-ch">${x(v.channel)}</div></div>`;
+  el.onclick = () => playShortInline(v, el);
+  return el;
+}
+
 // ===== RENDER =====
 function renderAll() {
   renderHero();
-  const ct = document.getElementById('content');
-  ct.innerHTML = '';
+  const ct = document.getElementById('content'); ct.innerHTML = '';
   const newIds = getNewVidIds();
+  updateBackBtn();
 
   if (channelFilter) { renderChannelPage(ct); return; }
   if (q) { renderSearch(ct); return; }
 
   if (section === 'all') {
-    // Filter out shorts from regular feed
     const isShortLike = v => v.isShort === true;
 
     if (followed.size > 0) {
@@ -1240,46 +1602,59 @@ function renderAll() {
       }
       if (fv.length) {
         if (newIds.length) {
-          const b = document.createElement('div');
-          b.className = 'new-vids-banner';
+          const b = document.createElement('div'); b.className = 'new-vids-banner';
           b.innerHTML = `<svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg><span>יש <strong>${newIds.length} סרטונים חדשים</strong> מהערוצים שאתה עוקב!</span>`;
           ct.appendChild(b);
         }
-        // Show only latest 6 from followed channels in a scrollable row
         const fvLatest = fv.slice(0, 8);
-        const secF = mkSec('חדש מהערוצים שלך', fvLatest, '<path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>', '#3ea6ff', true, null, newIds);
-        ct.appendChild(secF);
+        ct.appendChild(mkSec('חדש מהערוצים שלך', fvLatest, '<path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.9 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/>', '#3ea6ff', true, null, newIds));
       }
     }
 
-    // Recommended section — top 8, no shorts
+    // GRADUATED LAYOUT
     const allRec = getRec().map(id => vids.find(v => v.id === id))
-      .filter(v => v && !blockedVids.includes(v.id) && !blockedChannels.includes(v.channel) && !isShortLike(v))
-      .slice(0, 8);
-    if (allRec.length) {
-      const secR = mkSec(Object.keys(chWatches).length > 0 ? 'מומלצים עבורך' : 'מומלצים', allRec, '<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>', '#ffd93d', true, null, newIds);
-      ct.appendChild(secR);
+      .filter(v => v && !blockedVids.includes(v.id) && !blockedChannels.includes(v.channel) && !isShortLike(v));
+
+    if (allRec.length > 0) {
+      // 1. Featured (biggest)
+      const featured = allRec[0];
+      const featEl = mkFeaturedCard(featured);
+      ct.appendChild(featEl);
+
+      // 2. Two big videos
+      if (allRec.length > 1) {
+        const g2 = document.createElement('div'); g2.className = 'vgrid-2';
+        allRec.slice(1, 3).forEach((v, i) => g2.appendChild(mkCard(v, i * 30, newIds.includes(v.id))));
+        ct.appendChild(g2);
+      }
+
+      // 3. Three medium videos
+      if (allRec.length > 3) {
+        const g3 = document.createElement('div'); g3.className = 'vgrid-3';
+        allRec.slice(3, 6).forEach((v, i) => g3.appendChild(mkCard(v, i * 30, newIds.includes(v.id))));
+        ct.appendChild(g3);
+      }
+
+      // 4. Discovery / remaining as section header
+      if (allRec.length > 6) {
+        const secTitle = Object.keys(chWatches).length > 0 ? 'עוד סרטונים בשבילך' : 'מומלצים';
+        const sec = mkSec(secTitle, allRec.slice(6, 24), '<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>', '#ffd93d', false, null, newIds);
+        ct.appendChild(sec);
+      }
     }
 
-    // Mini Shorts row on homepage (4 shorts only)
-    const homeShorts = shortsVids.filter(v => !blockedVids.includes(v.id) && !blockedChannels.includes(v.channel)).slice(0, 6);
+    // 5. Shorts row
+    const homeShorts = shortsVids.filter(v => !blockedVids.includes(v.id) && !blockedChannels.includes(v.channel)).slice(0, 8);
     if (homeShorts.length) {
       const sSec = document.createElement('div'); sSec.className = 'section';
       sSec.innerHTML = `<div class="sec-hdr"><div class="sec-title"><div class="sec-ico" style="background:#ff000022;color:#ff0000"><svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.84 1.55V6.79a4.85 4.85 0 01-1.07-.1z"/></svg></div>Shorts בשבילך <button onclick="setSection('shorts',document.getElementById('n-shorts'))" style="font-size:11px;color:var(--blue);background:none;border:none;cursor:pointer;font-family:Rubik,sans-serif;margin-right:6px">הצג עוד →</button></div></div>`;
       const row = document.createElement('div'); row.className = 'shorts-row';
-      homeShorts.forEach((v,i) => {
-        const el = document.createElement('div'); el.className = 'short-card'; el.style.animationDelay=(i*20)+'ms';
-        el.innerHTML=`<div class="short-thumb"><img src="${v.thumb}" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${v.id}/default.jpg'" alt="${x(v.title)}"><div class="splay"><div class="splay-c"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div><div class="short-badge">Shorts</div></div><div class="short-info"><div class="short-title">${x(v.title)}</div><div class="short-ch">${x(v.channel)}</div></div>`;
-        el.onclick=()=>openModal(v); row.appendChild(el);
-      });
+      homeShorts.forEach((v, i) => row.appendChild(mkShortCard(v, i)));
       sSec.appendChild(row); ct.appendChild(sSec);
     }
 
     if (!ct.children.length) {
-      const empty = document.createElement('div');
-      empty.className = 'empty';
-      empty.innerHTML = `<div class="eico"><svg viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6zm12-3c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2s10 4.48 10 10z"/></svg></div><h3>ברוך הבא ל-MyTube</h3><p>חפש ערוצים ועקוב אחריהם לקבל תכנים מותאמים אישית</p>`;
-      ct.appendChild(empty);
+      ct.innerHTML = `<div class="empty"><div class="eico"><svg viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6zm12-3c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2s10 4.48 10 10z"/></svg></div><h3>ברוך הבא ל-MyTube</h3><p>חפש ערוצים ועקוב אחריהם לקבל תכנים מותאמים אישית</p></div>`;
     }
   }
 
@@ -1294,12 +1669,9 @@ function renderAll() {
     if (lv.length) {
       const s = mkSec('אהבתי', lv, '<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>', '#ff6b6b', false);
       const h = s.querySelector('.sec-title');
-      const btn = document.createElement('button');
-      btn.className = 'play-all-btn';
+      const btn = document.createElement('button'); btn.className = 'play-all-btn';
       btn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg> הפעל הכל`;
-      btn.onclick = playAllLiked;
-      h.appendChild(btn);
-      ct.appendChild(s);
+      btn.onclick = playAllLiked; h.appendChild(btn); ct.appendChild(s);
     } else ct.appendChild(mkEmpty('עדיין לא אהבת סרטונים', 'לחץ על הלב בכרטיסיית סרטון'));
   }
 
@@ -1325,42 +1697,73 @@ function renderAll() {
     else ct.appendChild(mkEmpty('לא צפית עדיין בסרטונים', ''));
   }
 
-  if (section === 'shorts') {
-    renderShortsSection(ct);
-    return;
-  }
+  if (section === 'shorts') { renderShortsSection(ct); return; }
 
   if (!ct.children.length && section !== 'all') ct.appendChild(mkEmpty('לא נמצאו סרטונים', ''));
 }
 
+// ===== FEATURED CARD =====
+function mkFeaturedCard(v) {
+  const col = PAL[Math.abs(hsh(v.channel || '')) % PAL.length];
+  const init = (v.channel || '?').slice(0, 2).toUpperCase();
+  const th = getChThumb(v.channelId);
+  const el = document.createElement('div'); el.className = 'featured-vid';
+  el.innerHTML = `
+    <img src="${v.thumb}" alt="${x(v.title)}" onerror="this.src='https://img.youtube.com/vi/${v.id}/default.jpg'">
+    <div class="featured-play-hint"><div class="fpc"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
+    <div class="featured-overlay">
+      <div class="featured-badge">מומלץ</div>
+      <div class="featured-title">${x(v.title)}</div>
+      <div class="featured-meta">
+        <div class="featured-av" style="background:${col}22;color:${col}">${th ? `<img src="${x(th)}" onerror="this.remove()">` : `<span style="font-size:10px;font-weight:700;width:100%;height:100%;display:flex;align-items:center;justify-content:center">${init}</span>`}</div>
+        <span>${x(v.channel)}</span>
+        ${v.publishedAt ? `<span class="featured-date">• ${fmtDate(v.publishedAt)}</span>` : ''}
+      </div>
+    </div>`;
+  el.onclick = () => openModal(v);
+  el.oncontextmenu = e => showCtx(e, 'video', v.id, v.channel);
+  return el;
+}
+
+// ===== CHANNEL PAGE =====
+let chPageTab = 'videos';
 async function renderChannelPage(ct) {
   const ch = channelFilter;
   const col = PAL[Math.abs(hsh(ch)) % PAL.length];
+  const chId = chIdMap[ch];
   const isF = followed.has(ch);
+  const th = getChThumb(chId);
 
   // Header
-  const hdr = document.createElement('div');
-  hdr.className = 'ch-page-hdr';
-  hdr.innerHTML = `<div class="ch-page-av" style="background:${col}22;color:${col}">${ch.slice(0, 2).toUpperCase()}</div><div style="flex:1"><div class="ch-page-name">${x(ch)}</div><div class="ch-page-sub" id="ch-page-sub">טוען...</div></div><button class="ch-follow-btn${isF ? ' following' : ''}" id="ch-follow-top">${isF ? 'מפסיק לעקוב' : 'עקוב'}</button>`;
+  const hdr = document.createElement('div'); hdr.className = 'ch-page-hdr';
+  hdr.innerHTML = `
+    <div class="ch-page-av" style="background:${col}22;color:${col}">${th ? `<img src="${x(th)}" onerror="this.remove()">` : ch.slice(0, 2).toUpperCase()}</div>
+    <div style="flex:1"><div class="ch-page-name">${x(ch)}</div><div class="ch-page-sub" id="ch-page-sub">טוען...</div></div>
+    <button class="ch-follow-btn${isF ? ' following' : ''}" id="ch-follow-top">${isF ? 'מפסיק לעקוב' : 'עקוב'}</button>`;
   ct.appendChild(hdr);
-  hdr.querySelector('#ch-follow-top').onclick = () => { toggleFollow(ch); };
+  hdr.querySelector('#ch-follow-top').onclick = () => { toggleFollow(ch); hdr.querySelector('#ch-follow-top').textContent = followed.has(ch) ? 'מפסיק לעקוב' : 'עקוב'; hdr.querySelector('#ch-follow-top').className = 'ch-follow-btn' + (followed.has(ch) ? ' following' : ''); };
 
-  // Try to fetch fresh channel videos if we don't have many
-  const chId = chIdMap[ch];
-  const cv = (chMap[ch] || []).map(id => vids.find(v => v.id === id)).filter(v => v && !blockedVids.includes(v.id));
+  // Tabs
+  const tabs = document.createElement('div'); tabs.className = 'ch-tabs';
+  ['videos','shorts','playlists'].forEach(t => {
+    const btn = document.createElement('button');
+    btn.className = 'ch-tab' + (chPageTab === t ? ' on' : '');
+    btn.textContent = t === 'videos' ? 'סרטונים' : t === 'shorts' ? 'Shorts' : 'פלייליסטים';
+    btn.onclick = () => { chPageTab = t; tabs.querySelectorAll('.ch-tab').forEach(b => b.classList.remove('on')); btn.classList.add('on'); renderChTabContent(ch, chId, t, tabContent); };
+    tabs.appendChild(btn);
+  });
+  ct.appendChild(tabs);
 
-  if (chId && cv.length < 5) {
-    const ind = document.createElement('div');
-    ind.className = 'fetch-indicator';
+  // Fetch if needed
+  if (chId && (chMap[ch] || []).length < 5) {
+    const ind = document.createElement('div'); ind.className = 'fetch-indicator';
     ind.innerHTML = `<svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg> טוען סרטונים...`;
     ct.appendChild(ind);
     await fetchChannelVideos(chId, ch, true);
     ind.remove();
   } else if (!chId) {
-    // Try to discover channel ID
     try {
-      const r = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${encodeURIComponent(ch)}&type=channel&key=${API_KEY}`);
-      const d = await r.json();
+      const d = await apiGet(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=1&q=${encodeURIComponent(ch)}&type=channel`);
       if (!d.error && d.items?.length) {
         const chId2 = d.items[0].id.channelId;
         chIdMap[ch] = chId2;
@@ -1370,56 +1773,73 @@ async function renderChannelPage(ct) {
     } catch(e) {}
   }
 
-  // Get updated videos after fetch
   const finalVids = (chMap[ch] || []).map(id => vids.find(v => v.id === id)).filter(v => v && !blockedVids.includes(v.id));
   document.getElementById('ch-page-sub').textContent = `${finalVids.length} סרטונים זמינים`;
 
-  // Playlists
-  const actualChId = chIdMap[ch];
-  if (actualChId) {
-    const plContainer = document.createElement('div');
-    ct.appendChild(plContainer);
-    fetchPlaylists(actualChId, plContainer);
-  }
+  const tabContent = document.createElement('div');
+  ct.appendChild(tabContent);
+  renderChTabContent(ch, chIdMap[ch], chPageTab, tabContent);
+}
 
-  if (finalVids.length) {
-    const g = document.createElement('div');
-    g.className = 'vgrid';
-    finalVids.forEach((v, i) => g.appendChild(mkCard(v, i * 30)));
-    ct.appendChild(g);
-  } else {
-    ct.appendChild(mkEmpty('אין סרטונים מהערוץ הזה', ''));
+function renderChTabContent(ch, chId, tab, container) {
+  container.innerHTML = '';
+  const allVids = (chMap[ch] || []).map(id => vids.find(v => v.id === id)).filter(v => v && !blockedVids.includes(v.id));
+
+  if (tab === 'videos') {
+    const regularVids = allVids.filter(v => !v.isShort);
+    if (regularVids.length) {
+      const g = document.createElement('div'); g.className = 'vgrid';
+      regularVids.forEach((v, i) => g.appendChild(mkCard(v, i * 30)));
+      container.appendChild(g);
+    } else {
+      container.appendChild(mkEmpty('אין סרטונים', ''));
+    }
+  } else if (tab === 'shorts') {
+    const sv = allVids.filter(v => v.isShort);
+    // Also get from shortsVids for this channel
+    const sv2 = shortsVids.filter(v => v.channel === ch && !allVids.find(vv => vv.id === v.id));
+    const combined = [...sv, ...sv2].filter(v => !blockedVids.includes(v.id));
+    if (combined.length) {
+      const row = document.createElement('div'); row.className = 'shorts-row'; row.style.flexWrap = 'wrap'; row.style.justifyContent = 'flex-start';
+      combined.forEach((v, i) => row.appendChild(mkShortCard(v, i)));
+      container.appendChild(row);
+    } else {
+      container.appendChild(mkEmpty('אין Shorts מהערוץ הזה', ''));
+    }
+  } else if (tab === 'playlists') {
+    if (chId) fetchPlaylists(chId, container);
+    else container.appendChild(mkEmpty('לא נמצאו פלייליסטים', ''));
   }
 }
 
 async function fetchPlaylists(chId, container) {
   try {
-    const r = await fetch(`https://www.googleapis.com/youtube/v3/playlists?part=snippet&maxResults=10&channelId=${chId}&key=${API_KEY}`);
-    const d = await r.json();
+    const d = await apiGet(`https://www.googleapis.com/youtube/v3/playlists?part=snippet&maxResults=10&channelId=${chId}`);
     if (d.items && d.items.length) {
-      const sec = document.createElement('div');
-      sec.className = 'section';
-      sec.innerHTML = `<div class="sec-hdr"><div class="sec-title"><div class="sec-ico" style="background:#74c0fc22;color:#74c0fc"><svg viewBox="0 0 24 24"><path d="M4 10h12v2H4zm0-4h12v2H4zm0 8h8v2H4zm10 0v6l5-3z"/></svg></div>פלייליסטים</div></div><div class="vgrid row"></div>`;
-      const grid = sec.querySelector('.vgrid');
+      const sec = document.createElement('div'); sec.className = 'section';
+      sec.innerHTML = `<div class="sec-hdr"><div class="sec-title"><div class="sec-ico" style="background:#74c0fc22;color:#74c0fc"><svg viewBox="0 0 24 24"><path d="M4 10h12v2H4zm0-4h12v2H4zm0 8h8v2H4zm10 0v6l5-3z"/></svg></div>פלייליסטים</div></div>`;
+      const grid = document.createElement('div'); grid.className = 'vgrid row';
       d.items.forEach((item, i) => {
-        const plThumb = item.snippet.thumbnails.high?.url || item.snippet.thumbnails.medium?.url;
-        const el = document.createElement('div');
-        el.className = 'vcard'; el.style.animationDelay = (i * 25) + 'ms';
-        el.innerHTML = `<div class="vthumb"><img src="${plThumb}" alt=""><div class="vhover"></div></div><div class="vinfo"><div class="vtxt"><div class="vtitle">${x(item.snippet.title)}</div><div class="vch">פלייליסט</div></div></div>`;
+        const plThumb = item.snippet.thumbnails.high?.url || item.snippet.thumbnails.medium?.url || '';
+        const el = document.createElement('div'); el.className = 'vcard'; el.style.animationDelay = (i * 25) + 'ms';
+        el.innerHTML = `<div class="vthumb"><img src="${plThumb}" alt="${x(item.snippet.title)}" onerror="this.src=''"><div class="vhover"></div></div><div class="vinfo"><div class="vtxt"><div class="vtitle">${x(item.snippet.title)}</div><div class="vch">פלייליסט</div></div></div>`;
         el.onclick = () => window.open(`https://www.youtube.com/playlist?list=${item.id}`, '_blank');
         grid.appendChild(el);
       });
-      container.appendChild(sec);
+      sec.appendChild(grid); container.appendChild(sec);
+    } else {
+      container.appendChild(mkEmpty('אין פלייליסטים', ''));
     }
-  } catch(e) {}
+  } catch(e) { container.appendChild(mkEmpty('שגיאה בטעינת פלייליסטים', '')); }
 }
 
+// ===== SEARCH RENDER =====
 function renderSearch(ct) {
   const visibleChs = searchChannels.filter(ch => !blockedChannels.includes(ch.name));
   if (visibleChs.length) {
     const sec = document.createElement('div'); sec.className = 'section';
     const hdr = document.createElement('div'); hdr.className = 'sec-hdr';
-    hdr.innerHTML = `<div class="sec-title"><div class="sec-ico" style="background:#4d96ff22;color:#4d96ff"><svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 12.5v-9l6 4.5-6 4.5z"/></svg></div>ערוצים</div>`;
+    hdr.innerHTML = `<div class="sec-title"><div class="sec-ico" style="background:#4d96ff22;color:#4d96ff"><svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 12.5v-9l6 4.5-6 4.5z"/></svg></div>ערוצים קשורים</div>`;
     sec.appendChild(hdr);
     let showN = 4;
     const grid = document.createElement('div'); grid.className = 'ch-grid-4'; sec.appendChild(grid);
@@ -1432,7 +1852,7 @@ function renderSearch(ct) {
         const el = document.createElement('div'); el.className = 'ch-g-card';
         el.innerHTML = `<div class="ch-g-av" style="background:${col}22;color:${col}">${ch.thumb ? `<img src="${x(ch.thumb)}" alt="" onerror="this.style.display='none'">` : ''}<span style="display:${ch.thumb?'none':'flex'};width:100%;height:100%;align-items:center;justify-content:center">${(ch.name||'?').slice(0,2).toUpperCase()}</span></div><div class="ch-g-name">${x(ch.name)}</div><div class="ch-g-sub">${x((ch.desc||'').slice(0,40)) || 'ערוץ YouTube'}</div><button class="ch-g-fbtn ${isF?'on':'off'}">${isF?'עוקב ✓':'+ עקוב'}</button>`;
         el.querySelector('.ch-g-fbtn').onclick = e => { e.stopPropagation(); toggleFollow(ch.name); drawGrid(); };
-        el.onclick = () => { channelFilter = ch.name; q = ''; document.getElementById('search-input').value = ''; buildSBChannels(); renderAll(); };
+        el.onclick = () => { pushNav(); channelFilter = ch.name; q = ''; document.getElementById('search-input').value = ''; buildSBChannels(); renderAll(); };
         el.oncontextmenu = e => showCtx(e, 'channel', null, ch.name);
         grid.appendChild(el);
       });
@@ -1442,12 +1862,36 @@ function renderSearch(ct) {
       } else { moreBtn.remove(); }
     }
     moreBtn.onclick = () => { showN = visibleChs.length; drawGrid(); };
-    drawGrid();
-    ct.appendChild(sec);
+    drawGrid(); ct.appendChild(sec);
   }
-  const filt = vids.filter(v => (v.title || '').toLowerCase().includes(q) || (v.channel || '').toLowerCase().includes(q)).filter(v => !blockedVids.includes(v.id) && !blockedChannels.includes(v.channel));
+  const filt = vids.filter(v => (v.title || '').toLowerCase().includes(q.toLowerCase()) || (v.channel || '').toLowerCase().includes(q.toLowerCase())).filter(v => !blockedVids.includes(v.id) && !blockedChannels.includes(v.channel));
   if (filt.length) ct.appendChild(mkSec(`תוצאות: "${q}"`, filt, '<path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>', '#aaa', false));
   else if (!visibleChs.length) ct.appendChild(mkEmpty('לא נמצאו תוצאות', 'נסה מילת חיפוש אחרת'));
+}
+
+// ===== INLINE PLAY IN CARD =====
+function playInCard(v, thumbEl) {
+  if (!thumbEl) return;
+  // If already playing this card, do nothing
+  if (thumbEl.querySelector('iframe')) return;
+  // Stop any other mini player / modal playback
+  stopAnyCurrentPlayback();
+  // Remove any other inline card players
+  document.querySelectorAll('.vthumb iframe').forEach(ifr => {
+    const parent = ifr.closest('.vthumb');
+    if (parent && parent !== thumbEl) {
+      ifr.remove();
+      parent.classList.remove('playing');
+    }
+  });
+  thumbEl.classList.add('playing');
+  const iframe = document.createElement('iframe');
+  iframe.src = `https://www.youtube.com/embed/${v.id}?autoplay=1&rel=0`;
+  iframe.allow = 'autoplay; encrypted-media';
+  iframe.allowFullscreen = true;
+  thumbEl.appendChild(iframe);
+  recordWatch(v.channel);
+  addToWatched(v);
 }
 
 // ===== CARD BUILDER =====
@@ -1475,44 +1919,43 @@ function mkCard(v, delay, isNew = false) {
   const init = (v.channel || '?').slice(0, 2).toUpperCase();
   const liked = likes.has(v.id);
   if (liked) el.classList.add('is-liked');
+  const th = getChThumb(v.channelId);
+  const avHTML = th
+    ? `<img src="${x(th)}" alt="${x(v.channel)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span style="display:none;width:34px;height:34px;border-radius:50%;background:${col}22;color:${col};align-items:center;justify-content:center;font-size:12px;font-weight:700">${init}</span>`
+    : `<span style="display:flex;width:34px;height:34px;border-radius:50%;background:${col}22;color:${col};align-items:center;justify-content:center;font-size:12px;font-weight:700">${init}</span>`;
 
   el.innerHTML = `
     <div class="vthumb">
       <img src="${v.thumb}" alt="${x(v.title)}" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${v.id}/default.jpg'">
       <div class="vhover"></div>
-      <div class="big-play-ov"><div class="bpc" title="הפעל כאן"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
-      <div class="card-play-hint">
-        <button class="cph-btn cph-modal" title="פתח בחלונית"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg> פתח</button>
-      </div>
       <div class="v-actions">
-        <button class="va-btn ext-btn" title="פתח ביוטיוב"><svg viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg></button>
+        <button class="va-btn modal-btn" title="פתח בחלונית"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></button>
         <button class="va-btn liked-btn${liked ? ' on' : ''}" data-id="${v.id}" title="אהבתי"><svg viewBox="0 0 24 24"><path d="${liked ? HEART_FULL : HEART_OUT}"/></svg></button>
+        <button class="va-btn ext-btn" title="פתח ביוטיוב"><svg viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg></button>
       </div>
       <div class="liked-corner" style="display:${liked ? 'flex' : 'none'}"><svg viewBox="0 0 24 24"><path d="${HEART_FULL}"/></svg></div>
       ${isNew ? '<div class="vnew-badge">חדש</div>' : ''}
     </div>
     <div class="vinfo">
-      <div class="vav" style="background:${col}22;color:${col}">${init}</div>
+      <div class="vav" style="background:${col}22;color:${col}">${avHTML}</div>
       <div class="vtxt">
         <div class="vtitle">${x(v.title)}</div>
         <div class="vch"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>${x(v.channel)}</div>
+        ${v.publishedAt ? `<div class="vdate">${fmtDate(v.publishedAt)}</div>` : ''}
         ${liked ? `<div class="vlabel"><svg viewBox="0 0 24 24"><path d="${HEART_FULL}"/></svg>אהבתי</div>` : ''}
       </div>
     </div>`;
 
-  const thumbEl = el.querySelector('.vthumb');
-  // Big centered play circle → play inline in card
-  el.querySelector('.big-play-ov .bpc').addEventListener('click', e => { e.stopPropagation(); playInCard(v, thumbEl); });
-  // Bottom hint "open" button → open modal popup
-  el.querySelector('.cph-modal').addEventListener('click', e => { e.stopPropagation(); openModal(v); });
-  // Clicking the thumb area itself (not the circles) → open modal
-  thumbEl.addEventListener('click', e => { if (e.target === thumbEl || e.target.tagName === 'IMG') openModal(v); });
+  // Clicking anywhere on the card plays inline; modal-btn opens the big modal
+  el.onclick = e => {
+    if (e.target.closest('.va-btn') || e.target.closest('.vav')) return;
+    playInCard(v, el.querySelector('.vthumb'));
+  };
+  el.querySelector('.modal-btn').addEventListener('click', e => { e.stopPropagation(); openModal(v); });
   el.querySelector('.ext-btn').addEventListener('click', e => { e.stopPropagation(); openYT(v); });
-  el.querySelector('.liked-btn').addEventListener('click', e => { e.stopPropagation(); toggleLike(v.id, el.querySelector('.liked-btn')); });
-  el.querySelector('.vtitle').addEventListener('click', () => openModal(v));
-  el.querySelector('.vav').addEventListener('click', e => { e.stopPropagation(); filterChannel(v.channel); });
+  el.querySelector('.liked-btn').addEventListener('click', e => { e.stopPropagation(); toggleLike(v.id); });
+  el.querySelector('.vav').addEventListener('click', e => { e.stopPropagation(); pushNav(); filterChannel(v.channel); });
   el.oncontextmenu = e => showCtx(e, 'video', v.id, v.channel);
-
   return el;
 }
 
@@ -1542,22 +1985,73 @@ function buildSBChannels() {
   arr.forEach(ch => {
     const c = PAL[Math.abs(hsh(ch)) % PAL.length];
     const hasNew = notifications.some(n => !n.read && n.channel === ch);
+    const chId = chIdMap[ch];
+    const th = getChThumb(chId);
     const el = document.createElement('div');
     el.className = 'chitem' + (channelFilter === ch ? ' active' : '');
-    el.innerHTML = `<div class="chdot${hasNew ? ' hn' : ''}" style="background:${c}22;color:${c}">${ch.slice(0, 2).toUpperCase()}<span class="ndot"></span></div><span class="chname">${x(ch)}</span>`;
-    el.onclick = () => filterChannel(ch);
+    el.innerHTML = `<div class="chdot${hasNew ? ' hn' : ''}" style="background:${c}22;color:${c}">${th ? `<img src="${x(th)}" onerror="this.remove()">` : ch.slice(0, 2).toUpperCase()}<span class="ndot"></span></div><span class="chname">${x(ch)}</span>`;
+    el.onclick = () => { pushNav(); filterChannel(ch); };
     el.oncontextmenu = e => showCtx(e, 'channel', null, ch);
     w.appendChild(el);
   });
 }
 
 // ===== NAVIGATION =====
-function filterChannel(ch) { channelFilter = ch; q = ''; document.getElementById('search-input').value = ''; document.querySelectorAll('.chip').forEach(c => c.classList.remove('on')); document.querySelectorAll('.nitem').forEach(n => n.classList.remove('on')); buildSBChannels(); renderAll(); }
-function setSection(sec, el) { section = sec; channelFilter = ''; q = ''; document.getElementById('search-input').value = ''; document.querySelectorAll('.nitem').forEach(n => n.classList.remove('on')); el.classList.add('on'); syncChips(sec); buildSBChannels(); renderAll(); }
-function chip(btn, sec) { section = sec; channelFilter = ''; q = ''; document.getElementById('search-input').value = ''; document.querySelectorAll('.chip').forEach(c => c.classList.remove('on')); btn.classList.add('on'); document.querySelectorAll('.nitem').forEach(n => n.classList.remove('on')); const n = document.getElementById('n-' + sec); if (n) n.classList.add('on'); renderAll(); }
+function pushNav() {
+  navHistory.push({ section, q, channelFilter });
+}
+
+function goBack() {
+  if (!navHistory.length) return;
+  const prev = navHistory.pop();
+  section = prev.section; q = prev.q; channelFilter = prev.channelFilter;
+  document.getElementById('search-input').value = q || '';
+  document.querySelectorAll('.nitem').forEach(n => n.classList.remove('on'));
+  const ni = document.getElementById('n-' + section);
+  if (ni) ni.classList.add('on');
+  syncChips(section);
+  buildSBChannels(); renderAll();
+}
+
+function updateBackBtn() {
+  const btn = document.getElementById('back-btn');
+  if (btn) btn.classList.toggle('show', navHistory.length > 0 && (!!channelFilter || !!q));
+}
+
+function filterChannel(ch) {
+  channelFilter = ch; q = ''; document.getElementById('search-input').value = '';
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+  document.querySelectorAll('.nitem').forEach(n => n.classList.remove('on'));
+  buildSBChannels(); renderAll();
+}
+
+function setSection(sec, el) {
+  section = sec; channelFilter = ''; q = ''; document.getElementById('search-input').value = '';
+  document.querySelectorAll('.nitem').forEach(n => n.classList.remove('on')); el.classList.add('on');
+  syncChips(sec); buildSBChannels(); renderAll();
+}
+
+function chip(btn, sec) {
+  section = sec; channelFilter = ''; q = ''; document.getElementById('search-input').value = '';
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('on')); btn.classList.add('on');
+  document.querySelectorAll('.nitem').forEach(n => n.classList.remove('on'));
+  const n = document.getElementById('n-' + sec); if (n) n.classList.add('on');
+  renderAll();
+}
+
 function syncChips(sec) { document.querySelectorAll('.chip').forEach(c => { c.classList.toggle('on', (c.getAttribute('onclick') || '').includes(`'${sec}'`)); }); }
 function toggleSB() { sbOpen = !sbOpen; document.getElementById('sidebar').classList.toggle('col', !sbOpen); document.getElementById('main').classList.toggle('col', !sbOpen); }
-function goHome(e) { e.preventDefault(); section = 'all'; channelFilter = ''; q = ''; document.getElementById('search-input').value = ''; document.querySelectorAll('.chip').forEach(c => c.classList.remove('on')); document.querySelector('.chip').classList.add('on'); document.querySelectorAll('.nitem').forEach(n => n.classList.remove('on')); document.getElementById('n-all').classList.add('on'); buildSBChannels(); renderAll(); }
+
+function goHome(e) {
+  e.preventDefault(); navHistory = [];
+  section = 'all'; channelFilter = ''; q = '';
+  document.getElementById('search-input').value = '';
+  document.querySelectorAll('.chip').forEach(c => c.classList.remove('on'));
+  document.querySelector('.chip').classList.add('on');
+  document.querySelectorAll('.nitem').forEach(n => n.classList.remove('on'));
+  document.getElementById('n-all').classList.add('on');
+  buildSBChannels(); renderAll();
+}
 
 // ===== SEARCH =====
 let searchTimer;
@@ -1566,35 +2060,51 @@ function onSearchInput(v) {
   clearTimeout(searchTimer);
   const drop = document.getElementById('search-drop');
   if (!q) { drop.classList.remove('show'); if (!channelFilter) renderAll(); return; }
-  const matches = [...new Set(vids.filter(vid => !blockedChannels.includes(vid.channel) && (vid.channel || '').toLowerCase().includes(q.toLowerCase())).map(v => v.channel))].slice(0, 5);
-  if (matches.length) {
-    drop.innerHTML = '<div class="sdrop-label">ערוצים</div>' + matches.map(ch => {
-      const el = document.createElement('div');
-      el.className = 'sdrop-item';
-      el.innerHTML = `<svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 12.5v-9l6 4.5-6 4.5z"/></svg>${x(ch)}`;
-      return el.outerHTML;
-    }).join('');
-    // Re-attach click handlers
-    drop.querySelectorAll('.sdrop-item').forEach((el, i) => {
-      el.onclick = () => { filterChannel(matches[i]); drop.classList.remove('show'); };
+
+  // Build suggestions: channels + titles
+  const chMatches = [...new Set(vids.filter(vid => !blockedChannels.includes(vid.channel) && (vid.channel || '').toLowerCase().includes(q.toLowerCase())).map(vv => vv.channel))].slice(0, 4);
+  const titleMatches = vids.filter(vid => !blockedVids.includes(vid.id) && (vid.title || '').toLowerCase().includes(q.toLowerCase())).slice(0, 4);
+
+  let html = '';
+  if (chMatches.length) {
+    html += '<div class="sdrop-label">ערוצים</div>';
+    html += chMatches.map(ch => `<div class="sdrop-item sdrop-ch"><svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 12.5v-9l6 4.5-6 4.5z"/></svg>${x(ch)}</div>`).join('');
+  }
+  if (titleMatches.length) {
+    html += '<div class="sdrop-label">סרטונים</div>';
+    html += titleMatches.map(vv => `<div class="sdrop-item sdrop-vid" data-id="${vv.id}"><svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>${x(vv.title)}</div>`).join('');
+  }
+
+  if (html) {
+    drop.innerHTML = html;
+    drop.querySelectorAll('.sdrop-ch').forEach((el, i) => {
+      el.onclick = () => { pushNav(); filterChannel(chMatches[i]); drop.classList.remove('show'); };
+    });
+    drop.querySelectorAll('.sdrop-vid').forEach(el => {
+      const vid = vids.find(vv => vv.id === el.dataset.id);
+      el.onclick = () => { drop.classList.remove('show'); if (vid) openModal(vid); };
     });
     drop.classList.add('show');
-  } else drop.classList.remove('show');
+  } else {
+    drop.classList.remove('show');
+  }
+
   searchTimer = setTimeout(() => { if (q.length > 2) doSearch(); }, 1500);
 }
 
 function doSearch() {
   const v = document.getElementById('search-input').value.trim();
   if (!v) return;
+  pushNav();
   q = v; channelFilter = '';
   document.getElementById('search-drop').classList.remove('show');
   searchYouTube(v);
 }
 
 function hardReload() {
-  // Clear vids cache to get fresh content
   vids = []; chMap = {};
   section = 'all'; channelFilter = ''; q = '';
+  navHistory = [];
   showSkels();
   if (followed.size > 0) fetchFollowedChannelsVideos(true);
   else searchYouTube('מוזיקה ישראלית חדשות בידור ספורט');
@@ -1604,62 +2114,6 @@ function hardReload() {
 function playAllLiked() {
   const lv = vids.filter(v => likes.has(v.id) && !blockedVids.includes(v.id) && !blockedChannels.includes(v.channel));
   if (lv.length) window.open(`https://www.youtube.com/watch_videos?video_ids=${lv.map(v => v.id).join(',')}`, '_blank');
-}
-
-// ===== SHORTS =====
-let shortsVids = JSON.parse(localStorage.getItem('mshortvids') || '[]');
-let shortsFetchTime = parseInt(localStorage.getItem('mshortft') || '0');
-const SHORTS_COOLDOWN = 30 * 60 * 1000; // 30 min
-
-async function fetchShortsRecommendations() {
-  if (Date.now() - shortsFetchTime < SHORTS_COOLDOWN) return;
-  // Build query from followed channels + watch history
-  const topChannels = Object.entries(chWatches).sort((a,b)=>b[1]-a[1]).slice(0,3).map(e=>e[0]);
-  const queries = [];
-  if (topChannels.length) queries.push(`${topChannels[0]} shorts`);
-  if (topChannels.length > 1) queries.push(`${topChannels[1]} shorts`);
-  queries.push('שורטסים ישראל', '#shorts ישראל');
-  const seen = new Set(shortsVids.map(v => v.id));
-  let fetched = [];
-  for (const q of queries.slice(0, 2)) {
-    try {
-      const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=20&q=${encodeURIComponent(q)}&type=video&videoDuration=short&regionCode=${REGION}&relevanceLanguage=${LANG}&key=${API_KEY}`;
-      const r = await fetch(url); const d = await r.json();
-      if (!d.error && d.items) {
-        for (const item of d.items) {
-          if (!item.id?.videoId || seen.has(item.id.videoId)) continue;
-          // Only include likely shorts (title or description has #shorts or duration hint)
-          fetched.push({ id: item.id.videoId, title: item.snippet.title, channel: item.snippet.channelTitle, channelId: item.snippet.channelId, thumb: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.medium?.url, desc: item.snippet.description, publishedAt: item.snippet.publishedAt, isShort: true });
-          seen.add(item.id.videoId);
-        }
-      }
-    } catch(e) {}
-  }
-  if (fetched.length) {
-    shortsVids = [...fetched, ...shortsVids].slice(0, 60);
-    shortsFetchTime = Date.now();
-    localStorage.setItem('mshortvids', JSON.stringify(shortsVids));
-    localStorage.setItem('mshortft', String(shortsFetchTime));
-  }
-}
-
-function renderShortsSection(ct) {
-  const combined = shortsVids.filter(v => !blockedVids.includes(v.id) && !blockedChannels.includes(v.channel));
-  const fetchNeeded = Date.now() - shortsFetchTime > SHORTS_COOLDOWN;
-  if (!combined.length && !fetchNeeded) { ct.appendChild(mkEmpty('אין Shorts זמינים', 'מרענן...')); fetchShortsRecommendations().then(() => renderShortsSection(ct)); return; }
-  if (fetchNeeded) fetchShortsRecommendations().then(() => { if (section === 'shorts') renderShortsSection(document.getElementById('content')); });
-  if (!combined.length) { const ind = document.createElement('div'); ind.className = 'fetch-indicator'; ind.innerHTML = `<svg viewBox="0 0 24 24"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg> טוען Shorts...`; ct.appendChild(ind); return; }
-  const sec = document.createElement('div'); sec.className = 'section';
-  sec.innerHTML = `<div class="sec-hdr"><div class="sec-title"><div class="sec-ico" style="background:#ff000022;color:#ff0000"><svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.84 1.55V6.79a4.85 4.85 0 01-1.07-.1z"/></svg></div>Shorts מומלצים בשבילך</div><span class="sec-count">${combined.length} שורטסים</span></div>`;
-  const row = document.createElement('div'); row.className = 'shorts-row';
-  combined.forEach((v, i) => {
-    const el = document.createElement('div'); el.className = 'short-card'; el.style.animationDelay = (i*20)+'ms';
-    el.innerHTML = `<div class="short-thumb"><img src="${v.thumb}" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${v.id}/default.jpg'" alt="${x(v.title)}"><div class="splay"><div class="splay-c"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div><div class="short-badge">Shorts</div></div><div class="short-info"><div class="short-title">${x(v.title)}</div><div class="short-ch">${x(v.channel)}</div></div>`;
-    el.onclick = () => openModal(v);
-    row.appendChild(el);
-  });
-  sec.appendChild(row);
-  ct.appendChild(sec);
 }
 
 // ===== UTILS =====
