@@ -836,6 +836,18 @@ function mkChAvHTML(channelId, channelName, size = 34, fontSize = 12) {
   return `<span style="width:${size}px;height:${size}px;border-radius:50%;background:${col}22;color:${col};display:flex;align-items:center;justify-content:center;font-size:${fontSize}px;font-weight:700">${init}</span>`;
 }
 
+// ===== SHORTS DETECTION =====
+// A video is considered a Short if explicitly flagged OR if title/desc contains #shorts markers
+function isShort(v) {
+  if (!v) return false;
+  if (v.isShort === true) return true;
+  const t = (v.title || '').toLowerCase();
+  const d = (v.desc || '').toLowerCase();
+  if (t.includes('#shorts') || t.includes('#short') || t.includes(' shorts') && t.length < 60) return true;
+  if (d.includes('#shorts') || d.includes('#short')) return true;
+  return false;
+}
+
 // ===== CACHE =====
 function saveVidsCache() {
   try {
@@ -914,11 +926,21 @@ async function fetchDiscoveryContent() {
 async function searchYouTube(query = 'ישראל') {
   showSkels();
   searchChannels = [];
+  // Build a broader query: if query has multiple words, also try first word alone as fallback
+  const broadQuery = query;
   try {
-    const d1 = await apiGet(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&q=${encodeURIComponent(query)}&type=video&regionCode=${REGION}&relevanceLanguage=${LANG}`);
+    const d1 = await apiGet(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&q=${encodeURIComponent(broadQuery)}&type=video&regionCode=${REGION}&relevanceLanguage=${LANG}`);
     if (d1.error) throw new Error(d1.error.message);
 
-    const fetched = d1.items.filter(item => item.id?.videoId).map(item => ({
+    let items = d1.items || [];
+    // If very few results and query has multiple words, retry with relaxed query
+    if (items.length < 5 && query.trim().split(/\s+/).length > 1) {
+      const relaxed = query.trim().split(/\s+/)[0];
+      const d1b = await apiGet(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=30&q=${encodeURIComponent(relaxed)}&type=video&regionCode=${REGION}&relevanceLanguage=${LANG}`);
+      if (!d1b.error && d1b.items) items = [...items, ...d1b.items];
+    }
+
+    const fetched = items.filter(item => item.id?.videoId).map(item => ({
       id: item.id.videoId, title: item.snippet.title, channel: item.snippet.channelTitle,
       channelId: item.snippet.channelId, thumb: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.medium?.url,
       desc: item.snippet.description, publishedAt: item.snippet.publishedAt
@@ -1004,7 +1026,14 @@ async function fetchChannelVideos(chId, chName, force = false) {
 function mergeVids(newVids) {
   const existingIds = new Set(vids.map(v => v.id));
   for (const v of newVids) {
+    // Auto-tag shorts on arrival
+    if (!v.isShort && isShort(v)) v.isShort = true;
     if (!existingIds.has(v.id)) { vids.push(v); existingIds.add(v.id); }
+    else {
+      // Update existing entry to add isShort flag if detected
+      const existing = vids.find(vv => vv.id === v.id);
+      if (existing && !existing.isShort && v.isShort) existing.isShort = true;
+    }
   }
   if (vids.length > MAX_VIDS_CACHE) vids = vids.slice(0, MAX_VIDS_CACHE);
 }
@@ -1590,7 +1619,7 @@ function renderAll() {
   if (q) { renderSearch(ct); return; }
 
   if (section === 'all') {
-    const isShortLike = v => v.isShort === true;
+    const isShortLike = isShort;
 
     if (followed.size > 0) {
       const fv = [];
@@ -1786,7 +1815,7 @@ function renderChTabContent(ch, chId, tab, container) {
   const allVids = (chMap[ch] || []).map(id => vids.find(v => v.id === id)).filter(v => v && !blockedVids.includes(v.id));
 
   if (tab === 'videos') {
-    const regularVids = allVids.filter(v => !v.isShort);
+    const regularVids = allVids.filter(v => !isShort(v));
     if (regularVids.length) {
       const g = document.createElement('div'); g.className = 'vgrid';
       regularVids.forEach((v, i) => g.appendChild(mkCard(v, i * 30)));
@@ -1795,7 +1824,7 @@ function renderChTabContent(ch, chId, tab, container) {
       container.appendChild(mkEmpty('אין סרטונים', ''));
     }
   } else if (tab === 'shorts') {
-    const sv = allVids.filter(v => v.isShort);
+    const sv = allVids.filter(v => isShort(v));
     // Also get from shortsVids for this channel
     const sv2 = shortsVids.filter(v => v.channel === ch && !allVids.find(vv => vv.id === v.id));
     const combined = [...sv, ...sv2].filter(v => !blockedVids.includes(v.id));
@@ -1864,7 +1893,14 @@ function renderSearch(ct) {
     moreBtn.onclick = () => { showN = visibleChs.length; drawGrid(); };
     drawGrid(); ct.appendChild(sec);
   }
-  const filt = vids.filter(v => (v.title || '').toLowerCase().includes(q.toLowerCase()) || (v.channel || '').toLowerCase().includes(q.toLowerCase())).filter(v => !blockedVids.includes(v.id) && !blockedChannels.includes(v.channel));
+  // Fuzzy local filter — split query into words, match if ANY word appears in title/channel
+  const words = q.toLowerCase().split(/\s+/).filter(w => w.length > 1);
+  const fuzzyMatch = v => {
+    const title = (v.title || '').toLowerCase();
+    const ch = (v.channel || '').toLowerCase();
+    return words.some(w => title.includes(w) || ch.includes(w));
+  };
+  const filt = vids.filter(v => fuzzyMatch(v) && !blockedVids.includes(v.id) && !blockedChannels.includes(v.channel));
   if (filt.length) ct.appendChild(mkSec(`תוצאות: "${q}"`, filt, '<path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/>', '#aaa', false));
   else if (!visibleChs.length) ct.appendChild(mkEmpty('לא נמצאו תוצאות', 'נסה מילת חיפוש אחרת'));
 }
@@ -2061,9 +2097,11 @@ function onSearchInput(v) {
   const drop = document.getElementById('search-drop');
   if (!q) { drop.classList.remove('show'); if (!channelFilter) renderAll(); return; }
 
-  // Build suggestions: channels + titles
-  const chMatches = [...new Set(vids.filter(vid => !blockedChannels.includes(vid.channel) && (vid.channel || '').toLowerCase().includes(q.toLowerCase())).map(vv => vv.channel))].slice(0, 4);
-  const titleMatches = vids.filter(vid => !blockedVids.includes(vid.id) && (vid.title || '').toLowerCase().includes(q.toLowerCase())).slice(0, 4);
+  // Build suggestions: channels + titles — fuzzy word match
+  const qWords = q.toLowerCase().split(/\s+/).filter(w => w.length > 1);
+  const fuzzy = (s) => qWords.some(w => (s || '').toLowerCase().includes(w));
+  const chMatches = [...new Set(vids.filter(vid => !blockedChannels.includes(vid.channel) && fuzzy(vid.channel)).map(vv => vv.channel))].slice(0, 4);
+  const titleMatches = vids.filter(vid => !blockedVids.includes(vid.id) && fuzzy(vid.title)).slice(0, 4);
 
   let html = '';
   if (chMatches.length) {
