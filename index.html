@@ -531,7 +531,7 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
     <div class="sp-section">חיבור YouTube</div>
     <div class="sp-row">
       <span>חשבון YouTube שלי</span>
-      <button class="sp-btn" onclick="toggleYTPanel();toggleSettings()">הגדר</button>
+      <button class="sp-btn" onclick="openYTPanelFromSettings()">הגדר</button>
     </div>
     <div class="sp-section">תצוגה</div>
     <div class="sp-row">
@@ -868,13 +868,22 @@ function renderYTUserArea() {
     if (personalChip) personalChip.style.display = '';
   } else {
     area.innerHTML = `<button class="yt-login-btn" onclick="toggleYTPanel()">
-      <svg viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M10 15l5.19-3L10 9v6zm12-3c0 5.52-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2s10 4.48 10 10z" fill="#fff"/></svg>
       התחבר ל-YouTube
     </button>`;
     document.getElementById('yt-dis-btn')?.classList.remove('vis');
     if (personalBtn) personalBtn.style.display = 'none';
     if (personalChip) personalChip.style.display = 'none';
   }
+}
+
+function openYTPanelFromSettings() {
+  // Close settings, open yt panel
+  document.getElementById('settings-panel').classList.remove('open');
+  document.getElementById('sp-overlay').classList.remove('show');
+  setTimeout(() => {
+    document.getElementById('yt-panel').classList.add('open');
+  }, 150);
 }
 
 function toggleYTPanel() {
@@ -1152,17 +1161,47 @@ async function fetchChannelVideos(chId, chName, force = false) {
 
 function mergeVids(newVids) {
   const existingIds = new Set(vids.map(v => v.id));
+  const existingShortIds = new Set(shortsVids.map(v => v.id));
+  let shortsDirty = false;
+
   for (const v of newVids) {
-    // Auto-tag shorts on arrival
+    // Tag as short if detected
     if (!v.isShort && isShort(v)) v.isShort = true;
-    if (!existingIds.has(v.id)) { vids.push(v); existingIds.add(v.id); }
-    else {
-      // Update existing entry to add isShort flag if detected
-      const existing = vids.find(vv => vv.id === v.id);
-      if (existing && !existing.isShort && v.isShort) existing.isShort = true;
+
+    if (v.isShort) {
+      // Route to shortsVids pool only
+      if (!existingShortIds.has(v.id)) {
+        shortsVids.push(v);
+        existingShortIds.add(v.id);
+        shortsDirty = true;
+      }
+    } else {
+      // Regular video — remove from shortsVids if it ended up there
+      if (!existingIds.has(v.id)) {
+        vids.push(v);
+        existingIds.add(v.id);
+      } else {
+        // Update isShort=false on existing if previously misclassified
+        const ex = vids.find(vv => vv.id === v.id);
+        if (ex) ex.isShort = false;
+      }
     }
   }
+
+  // Also remove any regular videos that slipped into shortsVids
+  const before = shortsVids.length;
+  shortsVids = shortsVids.filter(v => v.isShort === true);
+  if (shortsVids.length !== before) shortsDirty = true;
+
+  // Remove any shorts that slipped into regular vids
+  vids = vids.filter(v => !v.isShort);
+
   if (vids.length > MAX_VIDS_CACHE) vids = vids.slice(0, MAX_VIDS_CACHE);
+  if (shortsVids.length > 120) shortsVids = shortsVids.slice(0, 120);
+
+  if (shortsDirty) {
+    localStorage.setItem('mshortvids', JSON.stringify(shortsVids));
+  }
 }
 
 async function fetchFollowedChannelsVideos(force = false) {
@@ -1460,70 +1499,86 @@ function fmtDate(iso) {
   return `לפני ${Math.floor(diff / 365 / 86400000)} שנים`;
 }
 
+// Poll time from YouTube iframe via postMessage every 2s
+let _timePollInterval = null;
+function _startTimePoll(iframe) {
+  clearInterval(_timePollInterval);
+  _timePollInterval = setInterval(() => {
+    try {
+      if (!iframe || !iframe.contentWindow) { clearInterval(_timePollInterval); return; }
+      iframe.contentWindow.postMessage(JSON.stringify({event:'listening',id:1}), '*');
+      iframe.contentWindow.postMessage(JSON.stringify({event:'command',func:'getPlayerState',args:[]}), '*');
+      iframe.contentWindow.postMessage(JSON.stringify({event:'infoDelivery',info:{currentTime:true}}), '*');
+      // Standard YT API poll
+      iframe.contentWindow.postMessage('{"event":"listening","id":1}', 'https://www.youtube.com');
+    } catch(e) {}
+  }, 2000);
+}
+function _stopTimePoll() { clearInterval(_timePollInterval); _timePollInterval = null; }
+
 // ===== MINI PLAYER =====
-function showMiniPlayer(v, existingIframe) {
+let _currentPlaySec = 0; // last known playback position in seconds
+
+// Listen for time updates from YouTube iframe API
+window.addEventListener('message', e => {
+  try {
+    const data = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+    if (data?.event === 'infoDelivery' && data?.info?.currentTime != null) {
+      _currentPlaySec = Math.floor(data.info.currentTime);
+    }
+  } catch(err) {}
+});
+
+function _makeIframeSrc(videoId, startSec) {
+  const t = startSec > 2 ? `&start=${startSec}` : '';
+  return `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&enablejsapi=1${t}`;
+}
+
+function showMiniPlayer(v, startSec) {
   miniVid = v;
   const mpVid = document.getElementById('mp-vid');
   document.getElementById('mp-title').textContent = v.title || 'סרטון YouTube';
   mpVid.innerHTML = '';
-  if (existingIframe) {
-    // Move the live iframe — video continues from exact position
-    existingIframe.style.position = 'absolute';
-    existingIframe.style.inset = '0';
-    existingIframe.style.width = '100%';
-    existingIframe.style.height = '100%';
-    existingIframe.style.border = 'none';
-    mpVid.appendChild(existingIframe);
-    activeIframe = existingIframe;
-  } else {
-    const iframe = document.createElement('iframe');
-    iframe.src = `https://www.youtube.com/embed/${v.id}?autoplay=1&rel=0&enablejsapi=1`;
-    iframe.allow = 'autoplay; encrypted-media';
-    iframe.allowFullscreen = true;
-    iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:none;';
-    mpVid.appendChild(iframe);
-    activeIframe = iframe;
-  }
+  const iframe = document.createElement('iframe');
+  iframe.src = _makeIframeSrc(v.id, startSec || 0);
+  iframe.allow = 'autoplay; encrypted-media';
+  iframe.allowFullscreen = true;
+  iframe.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;border:none;';
+  mpVid.appendChild(iframe);
+  activeIframe = iframe;
+  _startTimePoll(iframe);
   document.getElementById('mini-player').classList.add('show');
 }
 
 function closeMiniPlayer() {
+  _stopTimePoll();
   document.getElementById('mini-player').classList.remove('show');
   document.getElementById('mp-vid').innerHTML = '';
   miniVid = null;
   inlineCardVid = null;
   activeIframe = null;
+  _currentPlaySec = 0;
 }
 
 function expandMiniPlayer() {
   if (!miniVid) return;
   const v = miniVid;
-  const iframe = activeIframe;
-  // Hide mini player UI without destroying iframe
+  const t = _currentPlaySec;
+  // Hide mini player
   document.getElementById('mini-player').classList.remove('show');
-  miniVid = null;
-  inlineCardVid = null;
-  // Open modal and transplant the live iframe into it
-  _openModalWithIframe(v, iframe);
+  document.getElementById('mp-vid').innerHTML = '';
+  miniVid = null; activeIframe = null;
+  // Open modal from same position
+  _openModalWithIframe(v, null, t);
 }
 
-function _openModalWithIframe(v, iframe) {
+function _openModalWithIframe(v, _unused, startSec) {
   modalVid = v; modalIsPlaying = true;
   recordWatch(v.channel); addToWatched(v);
   const playerEl = document.getElementById('vmodal-player');
-  playerEl.innerHTML = '';
-  if (iframe) {
-    iframe.style.position = 'absolute';
-    iframe.style.inset = '0';
-    iframe.style.width = '100%';
-    iframe.style.height = '100%';
-    iframe.style.border = 'none';
-    playerEl.appendChild(iframe);
-    activeIframe = iframe;
-  } else {
-    playerEl.innerHTML = `<iframe src="https://www.youtube.com/embed/${v.id}?autoplay=1&rel=0&enablejsapi=1" allow="autoplay; encrypted-media" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:none;"></iframe>`;
-    activeIframe = playerEl.querySelector('iframe');
-  }
+  playerEl.innerHTML = `<iframe src="${_makeIframeSrc(v.id, startSec || 0)}" allow="autoplay; encrypted-media" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:none;"></iframe>`;
+  activeIframe = playerEl.querySelector('iframe');
+  _startTimePoll(activeIframe);
   document.getElementById('vmodal-title').textContent = v.title || 'סרטון YouTube';
   document.getElementById('vmodal-date').textContent = v.publishedAt ? 'עלה ב-' + fmtDate(v.publishedAt) : '';
   const col = PAL[Math.abs(hsh(v.channel || '')) % PAL.length];
@@ -1575,21 +1630,21 @@ async function fetchDesc(v) {
 function minimizeModal() {
   if (!modalVid) { closeModal(); return; }
   const v = modalVid;
-  const iframe = activeIframe;
-  // Hide modal without destroying iframe
+  const t = _currentPlaySec;
   document.getElementById('vmodal').classList.remove('open');
+  document.getElementById('vmodal-player').innerHTML = '';
   document.body.style.overflow = '';
-  modalVid = null; modalIsPlaying = false;
-  // Transfer live iframe to mini player
-  showMiniPlayer(v, iframe);
+  modalVid = null; modalIsPlaying = false; activeIframe = null;
+  showMiniPlayer(v, t);
 }
 
 function closeModal() {
+  _stopTimePoll();
   document.getElementById('vmodal').classList.remove('open');
   document.getElementById('vmodal-player').innerHTML = '';
   document.body.style.overflow = '';
   modalVid = null; modalIsPlaying = false;
-  activeIframe = null;
+  activeIframe = null; _currentPlaySec = 0;
 }
 
 function handleModalBg(e) { if (e.target.id === 'vmodal') closeModal(); }
@@ -1749,7 +1804,7 @@ function playShortInline(v, card) {
 }
 
 function renderShortsSection(ct) {
-  const combined = shortsVids.filter(v => !blockedVids.includes(v.id) && !blockedChannels.includes(v.channel));
+  const combined = shortsVids.filter(v => v.isShort === true && !blockedVids.includes(v.id) && !blockedChannels.includes(v.channel));
   const fetchNeeded = Date.now() - shortsFetchTime > SHORTS_COOLDOWN;
   if (!combined.length && !fetchNeeded) { ct.appendChild(mkEmpty('אין Shorts זמינים', 'מרענן...')); fetchShortsRecommendations().then(() => renderShortsSection(ct)); return; }
   if (fetchNeeded) fetchShortsRecommendations().then(() => { if (section === 'shorts') renderShortsSection(document.getElementById('content')); });
@@ -1777,9 +1832,9 @@ function mkShortCard(v, i) {
 
 // ===== RENDER =====
 function renderAll() {
-  // Before wiping content, rescue any inline card player → mini player (with live iframe)
+  // Before wiping content, rescue any inline card player → mini player (with resume time)
   if (inlineCardVid && !miniVid) {
-    showMiniPlayer(inlineCardVid, activeIframe || null);
+    showMiniPlayer(inlineCardVid, _currentPlaySec);
   }
   inlineCardVid = null;
 
@@ -1792,14 +1847,13 @@ function renderAll() {
   if (q) { renderSearch(ct); return; }
 
   if (section === 'all') {
-    const isShortLike = isShort;
 
     if (followed.size > 0) {
       const fv = [];
       for (const ch of followed) {
         if (blockedChannels.includes(ch)) continue;
         (chMap[ch] || []).map(id => vids.find(v => v.id === id))
-          .filter(v => v && !blockedVids.includes(v.id) && !isShortLike(v))
+          .filter(v => v && !blockedVids.includes(v.id))
           .forEach(v => fv.push(v));
       }
       if (fv.length) {
@@ -1815,7 +1869,7 @@ function renderAll() {
 
     // GRADUATED LAYOUT
     const allRec = getRec().map(id => vids.find(v => v.id === id))
-      .filter(v => v && !blockedVids.includes(v.id) && !blockedChannels.includes(v.channel) && !isShortLike(v));
+      .filter(v => v && !blockedVids.includes(v.id) && !blockedChannels.includes(v.channel));
 
     if (allRec.length > 0) {
       // 1. Featured (biggest)
@@ -1846,7 +1900,7 @@ function renderAll() {
     }
 
     // 5. Shorts row
-    const homeShorts = shortsVids.filter(v => !blockedVids.includes(v.id) && !blockedChannels.includes(v.channel)).slice(0, 8);
+    const homeShorts = shortsVids.filter(v => v.isShort === true && !blockedVids.includes(v.id) && !blockedChannels.includes(v.channel)).slice(0, 8);
     if (homeShorts.length) {
       const sSec = document.createElement('div'); sSec.className = 'section';
       sSec.innerHTML = `<div class="sec-hdr"><div class="sec-title"><div class="sec-ico" style="background:#ff000022;color:#ff0000"><svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.84 1.55V6.79a4.85 4.85 0 01-1.07-.1z"/></svg></div>Shorts בשבילך <button onclick="setSection('shorts',document.getElementById('n-shorts'))" style="font-size:11px;color:var(--blue);background:none;border:none;cursor:pointer;font-family:Rubik,sans-serif;margin-right:6px">הצג עוד →</button></div></div>`;
@@ -1989,25 +2043,23 @@ function renderChTabContent(ch, chId, tab, container) {
   const allVids = (chMap[ch] || []).map(id => vids.find(v => v.id === id)).filter(v => v && !blockedVids.includes(v.id));
 
   if (tab === 'videos') {
-    const regularVids = allVids.filter(v => !isShort(v));
-    if (regularVids.length) {
+    // vids array is already short-free
+    if (allVids.length) {
       const g = document.createElement('div'); g.className = 'vgrid';
-      regularVids.forEach((v, i) => g.appendChild(mkCard(v, i * 30)));
+      allVids.forEach((v, i) => g.appendChild(mkCard(v, i * 30)));
       container.appendChild(g);
     } else {
       container.appendChild(mkEmpty('אין סרטונים', ''));
     }
   } else if (tab === 'shorts') {
-    const sv = allVids.filter(v => isShort(v));
-    // Also get from shortsVids for this channel
-    const sv2 = shortsVids.filter(v => v.channel === ch && !allVids.find(vv => vv.id === v.id));
-    const combined = [...sv, ...sv2].filter(v => !blockedVids.includes(v.id));
-    if (combined.length) {
+    // Get shorts for this channel from shortsVids pool
+    const sv = shortsVids.filter(v => v.channel === ch && !blockedVids.includes(v.id));
+    if (sv.length) {
       const row = document.createElement('div'); row.className = 'shorts-row'; row.style.flexWrap = 'wrap'; row.style.justifyContent = 'flex-start';
-      combined.forEach((v, i) => row.appendChild(mkShortCard(v, i)));
+      sv.forEach((v, i) => row.appendChild(mkShortCard(v, i)));
       container.appendChild(row);
     } else {
-      container.appendChild(mkEmpty('אין Shorts מהערוץ הזה', ''));
+      container.appendChild(mkEmpty('אין Shorts מהערוץ הזה', 'שורטסים יטענו אם יש'));
     }
   } else if (tab === 'playlists') {
     if (chId) fetchPlaylists(chId, container);
@@ -2104,13 +2156,15 @@ function playInCard(v, thumbEl) {
     }
   });
   inlineCardVid = v;
+  _currentPlaySec = 0;
   thumbEl.classList.add('playing');
   const iframe = document.createElement('iframe');
-  iframe.src = `https://www.youtube.com/embed/${v.id}?autoplay=1&rel=0&enablejsapi=1`;
+  iframe.src = _makeIframeSrc(v.id, 0);
   iframe.allow = 'autoplay; encrypted-media';
   iframe.allowFullscreen = true;
   thumbEl.appendChild(iframe);
   activeIframe = iframe;
+  _startTimePoll(iframe);
   recordWatch(v.channel);
   addToWatched(v);
 }
