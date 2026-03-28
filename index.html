@@ -718,6 +718,7 @@ let sbOpen = true, section = 'all', q = '', channelFilter = '';
 let modalVid = null, heroVid = null, heroPlaying = false;
 let isFetchingChannels = false;
 let miniVid = null, modalIsPlaying = false;
+let inlineCardVid = null; // video currently playing inline in a card
 let initialFollowSet = new Set(); // channels being followed for first time (skip notifications)
 let navHistory = []; // [{section, q, channelFilter}]
 
@@ -1348,6 +1349,7 @@ function closeMiniPlayer() {
   mp.classList.remove('show');
   document.getElementById('mp-vid').innerHTML = '';
   miniVid = null;
+  inlineCardVid = null;
 }
 
 function expandMiniPlayer() {
@@ -1372,7 +1374,10 @@ function stopAnyCurrentPlayback() {
 
 // ===== MODAL =====
 function openModal(v) {
+  // If same video is in mini player, just expand it
+  if (miniVid && miniVid.id === v.id) { expandMiniPlayer(); return; }
   stopAnyCurrentPlayback();
+  inlineCardVid = null;
   modalVid = v; modalIsPlaying = true;
   recordWatch(v.channel); addToWatched(v);
   document.getElementById('vmodal-player').innerHTML = `<iframe src="https://www.youtube.com/embed/${v.id}?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
@@ -1610,6 +1615,12 @@ function mkShortCard(v, i) {
 
 // ===== RENDER =====
 function renderAll() {
+  // Before wiping content, rescue any inline card player → mini player
+  if (inlineCardVid && !miniVid) {
+    showMiniPlayer(inlineCardVid);
+  }
+  inlineCardVid = null;
+
   renderHero();
   const ct = document.getElementById('content'); ct.innerHTML = '';
   const newIds = getNewVidIds();
@@ -1910,8 +1921,17 @@ function playInCard(v, thumbEl) {
   if (!thumbEl) return;
   // If already playing this card, do nothing
   if (thumbEl.querySelector('iframe')) return;
-  // Stop any other mini player / modal playback
-  stopAnyCurrentPlayback();
+  // Stop mini player if something else was there, stop modal
+  if (miniVid && miniVid.id !== v.id) closeMiniPlayer();
+  if (modalIsPlaying) { closeModal(); }
+  // Stop hero
+  if (heroPlaying) {
+    heroPlaying = false;
+    const wrap = document.getElementById('hero-player-wrap');
+    wrap?.classList.remove('hero-playing');
+    wrap?.querySelector('iframe')?.remove();
+    _startHeroTimer();
+  }
   // Remove any other inline card players
   document.querySelectorAll('.vthumb iframe').forEach(ifr => {
     const parent = ifr.closest('.vthumb');
@@ -1920,6 +1940,7 @@ function playInCard(v, thumbEl) {
       parent.classList.remove('playing');
     }
   });
+  inlineCardVid = v;
   thumbEl.classList.add('playing');
   const iframe = document.createElement('iframe');
   iframe.src = `https://www.youtube.com/embed/${v.id}?autoplay=1&rel=0`;
