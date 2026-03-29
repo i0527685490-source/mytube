@@ -532,7 +532,7 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
     <div id="search-drop"></div>
   </div>
   <div class="tb-r">
-    <div class="quota-pill" id="quota-pill" title="יתרת בקשות API יומיות">
+    <div class="quota-pill" id="quota-pill" title="ללא מגבלת חיפוש — Invidious">
       <div class="quota-dot"></div>
       <span class="quota-val">—</span>
     </div>
@@ -799,59 +799,172 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
 </div>
 
 <script>
-// ===== API KEY ROTATION =====
-const API_KEYS = [
-  'AIzaSyCSK9j1UHoVymA_ViQa9jh8xis1QnYuHWo',
-  'AIzaSyBe6tl5Maj-iJ9kixVJLmAEt3wg6ej02H4',
-  'AIzaSyAFciXi4t5Qs8NCgtqafDw0_LM_rMLjNv8',
-  'AIzaSyBSK05_juxzJF_t8f_K1vYuFuPKv_OriBE',
-  'AIzaSyDzf_12LV7xvJ0icyRG18cM7W9b-wBjMKM'
+// ===== INVIDIOUS API — ללא מגבלת חיפוש, ללא מפתח API =====
+// Invidious is an open-source YouTube frontend. No API key, no daily quota.
+const INVIDIOUS_INSTANCES = [
+  'https://iv.ggtyler.dev',
+  'https://invidious.privacyredirect.com',
+  'https://invidious.nerdvpn.de',
+  'https://yt.cdaut.de',
+  'https://invidious.incogniweb.net'
 ];
-let apiKeyIdx = parseInt(localStorage.getItem('mapiidx') || '0');
-let apiCallsToday = JSON.parse(localStorage.getItem('mapicalls') || '{}');
-const apiCallsDate = localStorage.getItem('mapicdate') || '';
-const MAX_CALLS_PER_KEY = 90; // ~100 search units out of 10,000 quota
+let _invIdx = parseInt(localStorage.getItem('minvidx') || '0');
 
-function getKey() {
-  const today = new Date().toDateString();
-  if (apiCallsDate !== today) {
-    localStorage.setItem('mapicdate', today);
-    localStorage.setItem('mapicalls', '{}');
-    apiCallsToday = {};
-  }
-  return API_KEYS[apiKeyIdx % API_KEYS.length];
+function _invBase() { return INVIDIOUS_INSTANCES[_invIdx % INVIDIOUS_INSTANCES.length]; }
+function _invRotate() { _invIdx = (_invIdx + 1) % INVIDIOUS_INSTANCES.length; localStorage.setItem('minvidx', String(_invIdx)); }
+
+function _bestThumb(thumbs, videoId) {
+  if (!thumbs || !thumbs.length) return videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : '';
+  const order = ['maxresdefault', 'high', 'sddefault', 'medium', 'default'];
+  for (const q of order) { const f = thumbs.find(t => t.quality === q); if (f && f.url) return f.url; }
+  return thumbs[0]?.url || (videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : '');
 }
 
-async function apiGet(baseUrl) {
-  const key = getKey();
-  const url = baseUrl + '&key=' + key;
-  try {
-    const r = await fetch(url);
-    const d = await r.json();
-    // Track usage
-    apiCallsToday[key] = (apiCallsToday[key] || 0) + 1;
-    localStorage.setItem('mapicalls', JSON.stringify(apiCallsToday));
-    updateQuotaDisplay();
-    if (d.error && (d.error.code === 403 || d.error.code === 429 || (d.error.errors && d.error.errors[0]?.reason === 'quotaExceeded'))) {
-      // Rotate to next key
-      apiKeyIdx = (apiKeyIdx + 1) % API_KEYS.length;
-      localStorage.setItem('mapiidx', String(apiKeyIdx));
-      toast('מחליף API מפתח...');
-      const r2 = await fetch(baseUrl + '&key=' + getKey());
-      return r2.json();
+function _invVideoToYT(v) {
+  const thumb = _bestThumb(v.videoThumbnails, v.videoId);
+  return {
+    id: { videoId: v.videoId },
+    snippet: {
+      title: v.title || '',
+      channelTitle: v.author || '',
+      channelId: v.authorId || '',
+      thumbnails: { high: { url: thumb }, medium: { url: thumb } },
+      description: v.description || '',
+      publishedAt: v.published ? new Date(v.published * 1000).toISOString() : ''
     }
-    return d;
-  } catch(e) { throw e; }
+  };
+}
+
+function _invChannelToYT(c) {
+  const thumbs = c.authorThumbnails || c.authorThumbnail || [];
+  const sorted = Array.isArray(thumbs) ? [...thumbs].sort((a,b) => (b.width||0)-(a.width||0)) : [];
+  const thumb = sorted[0]?.url || '';
+  return {
+    id: c.authorId || c.ucid || '',
+    snippet: {
+      title: c.author || c.name || '',
+      description: c.description || '',
+      thumbnails: { default: { url: thumb }, medium: { url: thumb } }
+    }
+  };
+}
+
+async function _invFetch(path, retried = false) {
+  const url = _invBase() + path;
+  try {
+    const r = await fetch(url, { signal: AbortSignal.timeout(8000) });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return await r.json();
+  } catch(e) {
+    if (!retried) { _invRotate(); return _invFetch(path, true); }
+    throw e;
+  }
+}
+
+// Drop-in replacement for the old apiGet(ytUrl) that calls YouTube Data API v3.
+// This function intercepts the YouTube URL, maps it to Invidious, and returns
+// the same response shape the rest of the app expects.
+async function apiGet(ytUrl) {
+  // Strip any API key that might be in the URL
+  const cleanUrl = ytUrl.replace(/[&?]key=[^&]*/g, '').replace(/&&/g, '&').replace(/\?&/, '?');
+  let url;
+  try { url = new URL(cleanUrl, 'https://www.googleapis.com'); } catch(e) { return { items: [] }; }
+  const p = url.searchParams;
+  const path = url.pathname;
+
+  try {
+    // ── PLAYLISTS endpoint ─────────────────────────────────────────────────────
+    if (path.includes('/youtube/v3/playlists')) {
+      const channelId = p.get('channelId');
+      const maxResults = parseInt(p.get('maxResults') || '10');
+      if (channelId) {
+        const d = await _invFetch(`/api/v1/channels/${channelId}/playlists`);
+        const items = (d.playlists || []).slice(0, maxResults).map(pl => ({
+          id: pl.playlistId || pl.id || '',
+          snippet: {
+            title: pl.title || '',
+            thumbnails: {
+              high: { url: pl.playlistThumbnail || '' },
+              medium: { url: pl.playlistThumbnail || '' }
+            }
+          }
+        }));
+        return { items };
+      }
+      return { items: [] };
+    }
+
+    // ── CHANNELS endpoint ──────────────────────────────────────────────────────
+    if (path.includes('/youtube/v3/channels')) {
+      const handle = p.get('forHandle');
+      const ids = p.get('id');
+
+      if (handle) {
+        const slug = handle.replace(/^@/, '');
+        const d = await _invFetch(`/api/v1/channels/@${encodeURIComponent(slug)}`);
+        return { items: [_invChannelToYT(d)] };
+      }
+
+      if (ids) {
+        const idList = ids.split(',').filter(Boolean);
+        // Parallel fetch — much faster than sequential for thumbnail loads
+        const results = await Promise.all(idList.map(async cid => {
+          try { return _invChannelToYT(await _invFetch(`/api/v1/channels/${cid}`)); } catch(e) { return null; }
+        }));
+        return { items: results.filter(Boolean) };
+      }
+      return { items: [] };
+    }
+
+    // ── SEARCH endpoint ────────────────────────────────────────────────────────
+    if (path.includes('/youtube/v3/search')) {
+      const type = p.get('type') || 'video';
+      const channelId = p.get('channelId');
+      const q2 = p.get('q') || '';
+      const maxResults = Math.min(parseInt(p.get('maxResults') || '20'), 50);
+      const region = p.get('regionCode') || appSettings?.region || 'IL';
+      const dur = p.get('videoDuration'); // 'short' | 'medium' | 'long' | null
+      const order = p.get('order') || 'relevance';
+
+      // Channel videos (used by fetchChannelVideos)
+      if (channelId) {
+        const sortBy = order === 'viewCount' ? 'popular' : 'newest';
+        const d = await _invFetch(`/api/v1/channels/${channelId}/videos?sort_by=${sortBy}`);
+        const items = (d.videos || []).slice(0, maxResults).map(_invVideoToYT);
+        return { items, nextPageToken: d.continuation || '' };
+      }
+
+      // General search
+      const invType = type === 'channel' ? 'channel' : 'video';
+      let qs = `/api/v1/search?q=${encodeURIComponent(q2)}&type=${invType}&region=${region}`;
+      if (dur === 'short') qs += '&duration=short';
+      else if (dur === 'long') qs += '&duration=long';
+      // Note: Invidious has no "medium" duration filter; shorts are filtered client-side via isShort flag
+
+      const raw = await _invFetch(qs);
+      const arr = (Array.isArray(raw) ? raw : (raw.results || raw.items || [])).slice(0, maxResults);
+
+      if (invType === 'channel') {
+        return { items: arr.filter(i => i.type === 'channel').map(_invChannelToYT) };
+      }
+      return { items: arr.filter(i => i.type === 'video' || i.videoId).map(_invVideoToYT) };
+    }
+
+    return { items: [] };
+  } catch(e) {
+    console.warn('Invidious API error:', e.message);
+    return { items: [], error: { message: e.message, code: 503 } };
+  }
 }
 
 function updateQuotaDisplay() {
   const el = document.getElementById('quota-pill');
   if (!el) return;
-  const totalRemaining = API_KEYS.reduce((sum, k) => sum + Math.max(0, MAX_CALLS_PER_KEY - (apiCallsToday[k] || 0)), 0);
-  const pct = totalRemaining / (API_KEYS.length * MAX_CALLS_PER_KEY);
-  el.querySelector('.quota-val').textContent = `${totalRemaining} בקשות`;
-  el.className = 'quota-pill' + (pct < 0.15 ? ' crit' : pct < 0.35 ? ' low' : '');
-  el.title = `מפתח ${(apiKeyIdx % API_KEYS.length) + 1}/${API_KEYS.length} פעיל | ${totalRemaining} בקשות נשארו היום`;
+  const inst = _invBase().replace('https://', '');
+  el.querySelector('.quota-val').textContent = '∞ ללא מגבלה';
+  el.className = 'quota-pill';
+  el.querySelector('.quota-dot').style.background = '#4caf50';
+  el.title = `ללא מגבלת חיפוש — מופעל על ידי Invidious\nInstance: ${inst}`;
 }
 
 // ===== CONFIG =====
@@ -2506,7 +2619,7 @@ function clearCache() {
 
 function resetAll() {
   if (!confirm('למחוק את כל הנתונים? (מועדפים, עקיבות, היסטוריה)')) return;
-  ['mvids','mchids','ml','mf','mcw','mwatched','mbc','mbv','mn','mlv','mcft','mshortvids','mshortft','mset','mytuser','mapicalls','mapiidx'].forEach(k => localStorage.removeItem(k));
+  ['mvids','mchids','ml','mf','mcw','mwatched','mbc','mbv','mn','mlv','mcft','mshortvids','mshortft','mset','mytuser','minvidx','mchth'].forEach(k => localStorage.removeItem(k));
   location.reload();
 }
 
