@@ -412,7 +412,44 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
 .short-close-btn{position:absolute;top:6px;left:6px;z-index:11;background:rgba(0,0,0,.7);border:none;color:#fff;border-radius:50%;width:28px;height:28px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .short-close-btn svg{width:14px;height:14px;fill:currentColor;}
 
-/* SETTINGS PANEL */
+/* ===== TOOLBAR (sort + view toggle) ===== */
+.content-toolbar{display:flex;align-items:center;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+.sort-select{background:var(--bg3);border:1px solid var(--bg4);color:var(--txt);border-radius:20px;padding:6px 12px;font-size:12px;font-family:'Rubik',sans-serif;cursor:pointer;outline:none;transition:background var(--ease);}
+.sort-select:hover{background:var(--bg4);}
+.view-toggle{display:flex;background:var(--bg3);border-radius:20px;overflow:hidden;border:1px solid var(--bg4);}
+.vt-btn{background:none;border:none;cursor:pointer;color:var(--txt3);padding:6px 10px;display:flex;align-items:center;transition:all var(--ease);}
+.vt-btn.on{background:var(--txt);color:var(--bg);}
+.vt-btn svg{width:15px;height:15px;fill:currentColor;}
+.toolbar-spacer{flex:1;}
+
+/* ===== LIST VIEW ===== */
+.vgrid.list-view{display:flex;flex-direction:column;gap:12px;}
+.vgrid.list-view .vcard{display:flex;gap:14px;align-items:flex-start;}
+.vgrid.list-view .vcard:hover{transform:none;background:var(--bg2);border-radius:10px;padding:8px;}
+.vgrid.list-view .vthumb{flex-shrink:0;width:200px;border-radius:8px;aspect-ratio:16/9;}
+.vgrid.list-view .vinfo{flex-direction:column;padding-top:4px;flex:1;}
+.vgrid.list-view .vtitle{font-size:15px;-webkit-line-clamp:3;}
+.vgrid.list-view .vav{display:none;}
+
+/* ===== WATCH LATER ===== */
+.va-btn.wl-btn.on{background:rgba(62,166,255,.8);}
+.wl-corner{position:absolute;bottom:8px;left:8px;width:22px;height:22px;border-radius:50%;background:rgba(62,166,255,.9);display:none;align-items:center;justify-content:center;z-index:5;pointer-events:none;}
+.wl-corner svg{width:11px;height:11px;fill:#fff;}
+.vcard.is-wl .wl-corner{display:flex;}
+.vcard.is-wl .v-actions{opacity:1;}
+
+/* ===== FILTER CHIPS ===== */
+.filter-chips{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
+.fchip{background:var(--bg3);border:1px solid var(--bg4);color:var(--txt2);border-radius:20px;padding:5px 12px;font-size:12px;cursor:pointer;font-family:'Rubik',sans-serif;transition:all var(--ease);white-space:nowrap;}
+.fchip:hover{border-color:var(--blue);color:var(--blue);}
+.fchip.on{background:var(--blue);border-color:var(--blue);color:#fff;}
+
+/* ===== IMPROVED EMPTY STATE ===== */
+.empty-cta{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px;}
+.empty-cta-btn{background:var(--red);color:#fff;border:none;border-radius:20px;padding:10px 22px;font-size:13px;font-family:'Rubik',sans-serif;cursor:pointer;font-weight:600;}
+
+/* ===== WATCH LATER SECTION ===== */
+#n-watchlater{display:flex;}
 #settings-panel{position:fixed;top:0;left:0;width:300px;height:100vh;background:var(--bg2);border-right:1px solid var(--bg4);z-index:400;transform:translateX(-100%);transition:transform .25s cubic-bezier(.4,0,.2,1);overflow-y:auto;direction:rtl;box-shadow:4px 0 24px var(--shadow);}
 #settings-panel.open{transform:translateX(0);}
 .sp-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 18px;border-bottom:1px solid var(--bg4);position:sticky;top:0;background:var(--bg2);z-index:2;}
@@ -598,6 +635,10 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
     <span class="ni"><svg viewBox="0 0 24 24"><path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/></svg></span>
     <span class="nl">צפיתי</span>
   </div>
+  <div class="nitem" id="n-watchlater" onclick="setSection('watchlater',this)">
+    <span class="ni"><svg viewBox="0 0 24 24"><path d="M22 5.18L10.59 16.6l-4.24-4.24 1.41-1.41 2.83 2.83 10-10L22 5.18zm-2.21 5.04c.13.57.21 1.16.21 1.78 0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8c1.58 0 3.04.46 4.28 1.25l1.44-1.44A9.9 9.9 0 0 0 12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10c0-1.19-.22-2.33-.6-3.39l-1.61 1.61z"/></svg></span>
+    <span class="nl">לצפייה מאוחרת</span>
+  </div>
   <div class="nitem" id="n-shorts" onclick="setSection('shorts',this)">
     <span class="ni"><svg viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.27 6.27 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.84 1.55V6.79a4.85 4.85 0 01-1.07-.1z"/></svg></span>
     <span class="nl">Shorts</span>
@@ -625,10 +666,20 @@ body{background:var(--bg);color:var(--txt);font-family:'Rubik',sans-serif;overfl
     <button class="chip on" onclick="chip(this,'all')">הכל</button>
     <button class="chip" onclick="chip(this,'recommended')">מומלצים</button>
     <button class="chip" onclick="chip(this,'liked')">אהבתי</button>
+    <button class="chip" onclick="chip(this,'watchlater')">לצפייה מאוחרת</button>
     <button class="chip" onclick="chip(this,'following')">עוקב אחרי</button>
     <button class="chip" onclick="chip(this,'watched')">צפיתי</button>
     <button class="chip" onclick="chip(this,'shorts')">Shorts</button>
     <button class="chip" id="chip-personal" style="display:none" onclick="chip(this,'personal')">אזור אישי</button>
+    <div style="flex:1"></div>
+    <div class="view-toggle">
+      <button class="vt-btn on" id="vt-grid" onclick="setViewMode('grid')" title="רשת">
+        <svg viewBox="0 0 24 24"><path d="M3 3h8v8H3zm0 10h8v8H3zm10-10h8v8h-8zm0 10h8v8h-8z"/></svg>
+      </button>
+      <button class="vt-btn" id="vt-list" onclick="setViewMode('list')" title="רשימה">
+        <svg viewBox="0 0 24 24"><path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/></svg>
+      </button>
+    </div>
   </div>
 
   <button class="back-btn" id="back-btn" onclick="goBack()">
@@ -989,6 +1040,7 @@ function saveVidsCache() {
 
 // ===== INIT =====
 window.addEventListener('DOMContentLoaded', () => {
+  cleanVidsCache(); // Remove any stale shorts from cache
   if (vids.length > 0) {
     buildChMap();
     buildSBChannels();
@@ -1001,6 +1053,9 @@ window.addEventListener('DOMContentLoaded', () => {
   updateQuotaDisplay();
   renderYTUserArea();
   loadSettingsUI();
+  // Sync view mode buttons
+  document.getElementById('vt-grid')?.classList.toggle('on', viewMode === 'grid');
+  document.getElementById('vt-list')?.classList.toggle('on', viewMode === 'list');
 
   if (followed.size > 0) {
     fetchFollowedChannelsVideos(false);
@@ -1036,22 +1091,19 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // ===== DISCOVERY CONTENT =====
 async function fetchDiscoveryContent() {
-  // Fetch trending Israeli content for home page discovery
-  if (vids.length > 100) return; // already have plenty
+  if (vids.length > 100) return;
   try {
-    const queries = ['ישראל 2024 2025', 'ויראל ישראל', 'טלוויזיה ישראלית'];
+    const queries = ['ישראל 2024 2025', 'ויראל ישראל'];
     for (const q2 of queries.slice(0, 1)) {
-      const d = await apiGet(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=30&q=${encodeURIComponent(q2)}&type=video&regionCode=${REGION}&relevanceLanguage=${LANG}&order=viewCount`);
+      const d = await apiGet(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=30&q=${encodeURIComponent(q2)}&type=video&videoDuration=medium&regionCode=${REGION}&relevanceLanguage=${LANG}&order=viewCount`);
       if (d.items) {
         const fetched = d.items.filter(i => i.id?.videoId).map(i => ({
           id: i.id.videoId, title: i.snippet.title, channel: i.snippet.channelTitle,
           channelId: i.snippet.channelId, thumb: i.snippet.thumbnails.high?.url || i.snippet.thumbnails.medium?.url,
-          desc: i.snippet.description, publishedAt: i.snippet.publishedAt, isDiscovery: true
+          desc: i.snippet.description, publishedAt: i.snippet.publishedAt, isDiscovery: true, isShort: false
         }));
         mergeVids(fetched);
-        // Fetch thumbnails for discovered channels
-        const ids = [...new Set(fetched.map(v => v.channelId).filter(Boolean))];
-        fetchChannelThumbs(ids);
+        fetchChannelThumbs([...new Set(fetched.map(v => v.channelId).filter(Boolean))]);
       }
     }
     buildChMap(); saveVidsCache(); renderAll();
@@ -1059,32 +1111,35 @@ async function fetchDiscoveryContent() {
 }
 
 // ===== DATA FETCHING =====
+// View mode: 'grid' | 'list'
+let viewMode = localStorage.getItem('mviewmode') || 'grid';
+// Watch later
+let watchLater = new Set(JSON.parse(localStorage.getItem('mwl') || '[]'));
+function saveWatchLater() { localStorage.setItem('mwl', JSON.stringify([...watchLater])); }
+
 async function searchYouTube(query = 'ישראל') {
   showSkels();
   searchChannels = [];
-  // Build a broader query: if query has multiple words, also try first word alone as fallback
-  const broadQuery = query;
   try {
-    const d1 = await apiGet(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&q=${encodeURIComponent(broadQuery)}&type=video&regionCode=${REGION}&relevanceLanguage=${LANG}`);
+    // videoDuration=medium excludes shorts (<4min) at the API level — definitive fix
+    const d1 = await apiGet(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&q=${encodeURIComponent(query)}&type=video&videoDuration=medium&regionCode=${REGION}&relevanceLanguage=${LANG}`);
     if (d1.error) throw new Error(d1.error.message);
 
     let items = d1.items || [];
-    // If very few results and query has multiple words, retry with relaxed query
     if (items.length < 5 && query.trim().split(/\s+/).length > 1) {
       const relaxed = query.trim().split(/\s+/)[0];
-      const d1b = await apiGet(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=30&q=${encodeURIComponent(relaxed)}&type=video&regionCode=${REGION}&relevanceLanguage=${LANG}`);
+      const d1b = await apiGet(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=30&q=${encodeURIComponent(relaxed)}&type=video&videoDuration=medium&regionCode=${REGION}&relevanceLanguage=${LANG}`);
       if (!d1b.error && d1b.items) items = [...items, ...d1b.items];
     }
 
     const fetched = items.filter(item => item.id?.videoId).map(item => ({
       id: item.id.videoId, title: item.snippet.title, channel: item.snippet.channelTitle,
       channelId: item.snippet.channelId, thumb: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.medium?.url,
-      desc: item.snippet.description, publishedAt: item.snippet.publishedAt
+      desc: item.snippet.description, publishedAt: item.snippet.publishedAt, isShort: false
     }));
 
     mergeVids(fetched);
 
-    // Search channels too
     try {
       const d2 = await apiGet(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=8&q=${encodeURIComponent(query)}&type=channel&regionCode=${REGION}`);
       if (!d2.error) {
@@ -1093,15 +1148,11 @@ async function searchYouTube(query = 'ישראל') {
           thumb: item.snippet.thumbnails?.default?.url || item.snippet.thumbnails?.medium?.url
         }));
         for (const ch of searchChannels) if (ch.id && ch.name) { chIdMap[ch.name] = ch.id; if (ch.thumb) chThumbCache[ch.id] = ch.thumb; }
-        // Also suggest related channels based on search
-        await fetchRelatedChannels(query);
       }
     } catch(e2) {}
 
-    // Fetch channel thumbnails for videos
     const chIds = [...new Set(fetched.map(v => v.channelId).filter(Boolean))];
     fetchChannelThumbs(chIds);
-
     buildChMap(); saveVidsCache(); buildSBChannels(); checkNewVids(); renderAll();
   } catch(e) { showErr('שגיאה: ' + e.message); }
 }
@@ -1136,13 +1187,14 @@ async function fetchChannelVideos(chId, chName, force = false) {
   try {
     let all = [], pageToken = '', pages = 0;
     do {
-      const d = await apiGet(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&channelId=${chId}&type=video&order=date${pageToken ? '&pageToken=' + pageToken : ''}`);
+      // videoDuration=medium: excludes shorts (<4min) — definitive API-level filter
+      const d = await apiGet(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=50&channelId=${chId}&type=video&order=date&videoDuration=medium${pageToken ? '&pageToken=' + pageToken : ''}`);
       if (d.error || !d.items) break;
       all = all.concat(d.items.filter(i => i.id?.videoId).map(i => ({
         id: i.id.videoId, title: i.snippet.title, channel: i.snippet.channelTitle || chName,
         channelId: i.snippet.channelId || chId,
         thumb: i.snippet.thumbnails.high?.url || i.snippet.thumbnails.medium?.url || `https://img.youtube.com/vi/${i.id.videoId}/hqdefault.jpg`,
-        desc: i.snippet.description, publishedAt: i.snippet.publishedAt
+        desc: i.snippet.description, publishedAt: i.snippet.publishedAt, isShort: false
       })));
       pageToken = d.nextPageToken || '';
       pages++;
@@ -1153,7 +1205,6 @@ async function fetchChannelVideos(chId, chName, force = false) {
     chFetchTimes[chId] = Date.now();
     localStorage.setItem('mcft', JSON.stringify(chFetchTimes));
     buildChMap(); saveVidsCache();
-    // Fetch channel thumbnail
     fetchChannelThumbs([chId]);
     return all;
   } catch(e) { return []; }
@@ -1161,47 +1212,28 @@ async function fetchChannelVideos(chId, chName, force = false) {
 
 function mergeVids(newVids) {
   const existingIds = new Set(vids.map(v => v.id));
-  const existingShortIds = new Set(shortsVids.map(v => v.id));
-  let shortsDirty = false;
-
   for (const v of newVids) {
-    // Tag as short if detected
-    if (!v.isShort && isShort(v)) v.isShort = true;
-
-    if (v.isShort) {
-      // Route to shortsVids pool only
-      if (!existingShortIds.has(v.id)) {
-        shortsVids.push(v);
-        existingShortIds.add(v.id);
-        shortsDirty = true;
-      }
-    } else {
-      // Regular video — remove from shortsVids if it ended up there
-      if (!existingIds.has(v.id)) {
-        vids.push(v);
-        existingIds.add(v.id);
-      } else {
-        // Update isShort=false on existing if previously misclassified
-        const ex = vids.find(vv => vv.id === v.id);
-        if (ex) ex.isShort = false;
-      }
+    // Explicit isShort:false means it came from a medium/long API call — trust it
+    if (v.isShort !== true) v.isShort = false;
+    if (!existingIds.has(v.id)) {
+      vids.push(v);
+      existingIds.add(v.id);
     }
   }
-
-  // Also remove any regular videos that slipped into shortsVids
-  const before = shortsVids.length;
-  shortsVids = shortsVids.filter(v => v.isShort === true);
-  if (shortsVids.length !== before) shortsDirty = true;
-
-  // Remove any shorts that slipped into regular vids
-  vids = vids.filter(v => !v.isShort);
-
   if (vids.length > MAX_VIDS_CACHE) vids = vids.slice(0, MAX_VIDS_CACHE);
-  if (shortsVids.length > 120) shortsVids = shortsVids.slice(0, 120);
+}
 
-  if (shortsDirty) {
-    localStorage.setItem('mshortvids', JSON.stringify(shortsVids));
-  }
+// Clean any leftover shorts from the vids cache on startup
+function cleanVidsCache() {
+  const before = vids.length;
+  // Remove anything with isShort:true or that looks like a short by title
+  vids = vids.filter(v => {
+    if (v.isShort === true) return false;
+    const t = (v.title || '').toLowerCase();
+    if (t.includes('#shorts') || t.includes('#short')) return false;
+    return true;
+  });
+  if (vids.length !== before) saveVidsCache();
 }
 
 async function fetchFollowedChannelsVideos(force = false) {
@@ -1720,7 +1752,9 @@ function showCtx(e, type, vId, chName) {
     const vObj = vids.find(v => v.id === vId);
     if (vObj) {
       const isLiked = likes.has(vId);
+      const isWL = watchLater.has(vId);
       mkCtxItem(ctx, `<svg viewBox="0 0 24 24"><path d="${isLiked ? HEART_FULL : HEART_OUT}"/></svg>`, isLiked ? 'הסר מאהבתי' : 'הוסף לאהבתי', () => { toggleLike(vId); ctx.style.display = 'none'; });
+      mkCtxItem(ctx, `<svg viewBox="0 0 24 24"><path d="M22 5.18L10.59 16.6l-4.24-4.24 1.41-1.41 2.83 2.83 10-10L22 5.18zm-2.21 5.04c.13.57.21 1.16.21 1.78 0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8c1.58 0 3.04.46 4.28 1.25l1.44-1.44A9.9 9.9 0 0 0 12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10c0-1.19-.22-2.33-.6-3.39l-1.61 1.61z"/></svg>`, isWL ? 'הסר מ"לצפייה מאוחרת"' : 'הוסף ל"לצפייה מאוחרת"', () => { toggleWatchLater(vId); ctx.style.display = 'none'; });
       mkCtxSep(ctx);
       mkCtxItem(ctx, '<svg viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>', 'פתח ביוטיוב', () => { openYT(vObj); ctx.style.display = 'none'; });
     }
@@ -1894,8 +1928,12 @@ function renderAll() {
       // 4. Discovery / remaining as section header
       if (allRec.length > 6) {
         const secTitle = Object.keys(chWatches).length > 0 ? 'עוד סרטונים בשבילך' : 'מומלצים';
-        const sec = mkSec(secTitle, allRec.slice(6, 24), '<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>', '#ffd93d', false, null, newIds);
-        ct.appendChild(sec);
+        const sec = document.createElement('div'); sec.className = 'section';
+        const hdr = document.createElement('div'); hdr.className = 'sec-hdr';
+        hdr.innerHTML = `<div class="sec-title"><div class="sec-ico" style="background:#ffd93d22;color:#ffd93d"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div>${secTitle}</div>`;
+        const g = document.createElement('div'); g.className = 'vgrid'; applyViewMode(g);
+        allRec.slice(6, 24).forEach((v,i) => g.appendChild(mkCard(v, i*25, newIds.includes(v.id))));
+        sec.appendChild(hdr); sec.appendChild(g); ct.appendChild(sec);
       }
     }
 
@@ -1916,19 +1954,50 @@ function renderAll() {
 
   if (section === 'recommended') {
     const allRec = getRec().map(id => vids.find(v => v.id === id)).filter(v => v && !blockedVids.includes(v.id) && !blockedChannels.includes(v.channel));
-    if (allRec.length) ct.appendChild(mkSec('מומלצים עבורך', allRec, '<path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>', '#ffd93d', false));
-    else ct.appendChild(mkEmpty('אין מומלצים', ''));
+    if (allRec.length) {
+      let sortBy = 'date';
+      const tb = mkToolbar(sortBy, val => { sortBy = val; g.innerHTML = ''; sortVids(allRec, val).forEach((v,i) => g.appendChild(mkCard(v, i*20))); applyViewMode(g); });
+      ct.appendChild(tb);
+      const s = document.createElement('div'); s.className = 'section';
+      const g = document.createElement('div'); g.className = 'vgrid'; applyViewMode(g);
+      allRec.forEach((v,i) => g.appendChild(mkCard(v, i*20))); s.appendChild(g); ct.appendChild(s);
+    } else ct.appendChild(mkEmpty('אין מומלצים', ''));
   }
 
   if (section === 'liked') {
     const lv = vids.filter(v => likes.has(v.id) && !blockedVids.includes(v.id) && !blockedChannels.includes(v.channel));
     if (lv.length) {
-      const s = mkSec('אהבתי', lv, '<path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>', '#ff6b6b', false);
-      const h = s.querySelector('.sec-title');
+      let sortBy = 'date';
+      const tb = mkToolbar(sortBy, val => { sortBy = val; g.innerHTML = ''; sortVids(lv, val).forEach((v,i) => g.appendChild(mkCard(v, i*20))); applyViewMode(g); });
+      ct.appendChild(tb);
+      const s = document.createElement('div'); s.className = 'section';
+      const hdr = document.createElement('div'); hdr.className = 'sec-hdr';
+      hdr.innerHTML = `<div class="sec-title"><div class="sec-ico" style="background:#ff6b6b22;color:#ff6b6b"><svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>אהבתי</div><span class="sec-count">${lv.length} סרטונים</span>`;
       const btn = document.createElement('button'); btn.className = 'play-all-btn';
       btn.innerHTML = `<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg> הפעל הכל`;
-      btn.onclick = playAllLiked; h.appendChild(btn); ct.appendChild(s);
+      btn.onclick = playAllLiked; hdr.querySelector('.sec-title').appendChild(btn);
+      s.appendChild(hdr);
+      const g = document.createElement('div'); g.className = 'vgrid'; applyViewMode(g);
+      lv.forEach((v,i) => g.appendChild(mkCard(v, i*20))); s.appendChild(g); ct.appendChild(s);
     } else ct.appendChild(mkEmpty('עדיין לא אהבת סרטונים', 'לחץ על הלב בכרטיסיית סרטון'));
+  }
+
+  if (section === 'watchlater') {
+    const wlv = vids.filter(v => watchLater.has(v.id) && !blockedVids.includes(v.id) && !blockedChannels.includes(v.channel));
+    if (wlv.length) {
+      let sortBy = 'date';
+      const tb = mkToolbar(sortBy, val => { sortBy = val; g.innerHTML = ''; sortVids(wlv, val).forEach((v,i) => g.appendChild(mkCard(v, i*20))); applyViewMode(g); });
+      ct.appendChild(tb);
+      const s = document.createElement('div'); s.className = 'section';
+      const hdr = document.createElement('div'); hdr.className = 'sec-hdr';
+      hdr.innerHTML = `<div class="sec-title"><div class="sec-ico" style="background:#3ea6ff22;color:#3ea6ff"><svg viewBox="0 0 24 24"><path d="M22 5.18L10.59 16.6l-4.24-4.24 1.41-1.41 2.83 2.83 10-10L22 5.18zm-2.21 5.04c.13.57.21 1.16.21 1.78 0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8c1.58 0 3.04.46 4.28 1.25l1.44-1.44A9.9 9.9 0 0 0 12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10c0-1.19-.22-2.33-.6-3.39l-1.61 1.61z"/></svg></div>לצפייה מאוחרת</div><span class="sec-count">${wlv.length} סרטונים</span>`;
+      s.appendChild(hdr);
+      const g = document.createElement('div'); g.className = 'vgrid'; applyViewMode(g);
+      wlv.forEach((v,i) => g.appendChild(mkCard(v, i*20))); s.appendChild(g); ct.appendChild(s);
+    } else {
+      const d = mkEmpty('אין סרטונים לצפייה מאוחרת', 'לחץ על ✓ בכרטיס סרטון כדי להוסיף');
+      ct.appendChild(d);
+    }
   }
 
   if (section === 'following') {
@@ -1948,15 +2017,20 @@ function renderAll() {
   }
 
   if (section === 'watched') {
+    let sortBy = 'date';
     const wv = watchedVids.filter(v => !blockedVids.includes(v.id) && !blockedChannels.includes(v.channel));
-    if (wv.length) ct.appendChild(mkSec('צפיתי', wv, '<path d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"/>', '#20c997', false));
-    else ct.appendChild(mkEmpty('לא צפית עדיין בסרטונים', ''));
+    if (wv.length) {
+      const tb = mkToolbar(sortBy, val => { sortBy = val; g.innerHTML = ''; sortVids(wv, val).forEach((v,i) => g.appendChild(mkCard(v, i*20))); applyViewMode(g); });
+      ct.appendChild(tb);
+      const s = document.createElement('div'); s.className = 'section';
+      const g = document.createElement('div'); g.className = 'vgrid'; applyViewMode(g);
+      wv.forEach((v,i) => g.appendChild(mkCard(v, i*20))); s.appendChild(g); ct.appendChild(s);
+    } else ct.appendChild(mkEmpty('לא צפית עדיין בסרטונים', ''));
   }
 
   if (section === 'shorts') { renderShortsSection(ct); return; }
   if (section === 'personal') { renderPersonalSection(ct); return; }
-
-  if (!ct.children.length && section !== 'all') ct.appendChild(mkEmpty('לא נמצאו סרטונים', ''));
+  if (!ct.children.length && section !== 'all' && section !== 'watchlater') ct.appendChild(mkEmpty('לא נמצאו סרטונים', ''));
 }
 
 // ===== FEATURED CARD =====
@@ -2199,6 +2273,9 @@ function mkCard(v, delay, isNew = false) {
     ? `<img src="${x(th)}" alt="${x(v.channel)}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><span style="display:none;width:34px;height:34px;border-radius:50%;background:${col}22;color:${col};align-items:center;justify-content:center;font-size:12px;font-weight:700">${init}</span>`
     : `<span style="display:flex;width:34px;height:34px;border-radius:50%;background:${col}22;color:${col};align-items:center;justify-content:center;font-size:12px;font-weight:700">${init}</span>`;
 
+  const isWL = watchLater.has(v.id);
+  if (isWL) el.classList.add('is-wl');
+
   el.innerHTML = `
     <div class="vthumb">
       <img src="${v.thumb}" alt="${x(v.title)}" loading="lazy" onerror="this.src='https://img.youtube.com/vi/${v.id}/default.jpg'">
@@ -2206,9 +2283,11 @@ function mkCard(v, delay, isNew = false) {
       <div class="v-actions">
         <button class="va-btn modal-btn" title="פתח בחלונית"><svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg></button>
         <button class="va-btn liked-btn${liked ? ' on' : ''}" data-id="${v.id}" title="אהבתי"><svg viewBox="0 0 24 24"><path d="${liked ? HEART_FULL : HEART_OUT}"/></svg></button>
+        <button class="va-btn wl-btn${isWL ? ' on' : ''}" data-id="${v.id}" title="לצפייה מאוחרת"><svg viewBox="0 0 24 24"><path d="M22 5.18L10.59 16.6l-4.24-4.24 1.41-1.41 2.83 2.83 10-10L22 5.18zm-2.21 5.04c.13.57.21 1.16.21 1.78 0 4.42-3.58 8-8 8s-8-3.58-8-8 3.58-8 8-8c1.58 0 3.04.46 4.28 1.25l1.44-1.44A9.9 9.9 0 0 0 12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10c0-1.19-.22-2.33-.6-3.39l-1.61 1.61z"/></svg></button>
         <button class="va-btn ext-btn" title="פתח ביוטיוב"><svg viewBox="0 0 24 24"><path d="M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg></button>
       </div>
       <div class="liked-corner" style="display:${liked ? 'flex' : 'none'}"><svg viewBox="0 0 24 24"><path d="${HEART_FULL}"/></svg></div>
+      <div class="wl-corner"><svg viewBox="0 0 24 24"><path d="M9 16.2L4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4L9 16.2z"/></svg></div>
       ${isNew ? '<div class="vnew-badge">חדש</div>' : ''}
     </div>
     <div class="vinfo">
@@ -2229,6 +2308,7 @@ function mkCard(v, delay, isNew = false) {
   el.querySelector('.modal-btn').addEventListener('click', e => { e.stopPropagation(); openModal(v); });
   el.querySelector('.ext-btn').addEventListener('click', e => { e.stopPropagation(); openYT(v); });
   el.querySelector('.liked-btn').addEventListener('click', e => { e.stopPropagation(); toggleLike(v.id); });
+  el.querySelector('.wl-btn').addEventListener('click', e => { e.stopPropagation(); toggleWatchLater(v.id, el); });
   el.querySelector('.vav').addEventListener('click', e => { e.stopPropagation(); pushNav(); filterChannel(v.channel); });
   el.oncontextmenu = e => showCtx(e, 'video', v.id, v.channel);
   return el;
@@ -2489,6 +2569,54 @@ function hsh(s) { let r = 0; for (let i = 0; i < s.length; i++) r = ((r << 5) - 
 function x(s = '') { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
 let _t;
 function toast(m) { const t = document.getElementById('toast'); t.textContent = m; t.classList.add('show'); clearTimeout(_t); _t = setTimeout(() => t.classList.remove('show'), 2600); }
+
+// ===== VIEW MODE =====
+function setViewMode(mode) {
+  viewMode = mode;
+  localStorage.setItem('mviewmode', mode);
+  document.getElementById('vt-grid')?.classList.toggle('on', mode === 'grid');
+  document.getElementById('vt-list')?.classList.toggle('on', mode === 'list');
+  renderAll();
+}
+
+// ===== WATCH LATER =====
+function toggleWatchLater(id, cardEl) {
+  if (watchLater.has(id)) {
+    watchLater.delete(id);
+    toast('הוסר מ"לצפייה מאוחרת"');
+    if (cardEl) { cardEl.classList.remove('is-wl'); cardEl.querySelector('.wl-btn')?.classList.remove('on'); }
+  } else {
+    watchLater.add(id);
+    toast('נוסף ל"לצפייה מאוחרת"');
+    if (cardEl) { cardEl.classList.add('is-wl'); cardEl.querySelector('.wl-btn')?.classList.add('on'); }
+  }
+  saveWatchLater();
+  if (section === 'watchlater') setTimeout(renderAll, 120);
+}
+
+// Apply view mode class to a grid element
+function applyViewMode(gridEl) {
+  if (viewMode === 'list') gridEl.classList.add('list-view');
+}
+
+// Toolbar for sort + view toggle on section pages
+function mkToolbar(sortVal, onSort) {
+  const bar = document.createElement('div'); bar.className = 'content-toolbar';
+  const sel = document.createElement('select'); sel.className = 'sort-select';
+  [['date','חדש ביותר'],['title','לפי כותרת'],['channel','לפי ערוץ']].forEach(([v,l]) => {
+    const o = document.createElement('option'); o.value = v; o.textContent = l; o.selected = v === sortVal;
+    sel.appendChild(o);
+  });
+  sel.onchange = () => onSort(sel.value);
+  bar.appendChild(sel);
+  return bar;
+}
+
+function sortVids(arr, by) {
+  if (by === 'title') return [...arr].sort((a,b) => (a.title||'').localeCompare(b.title||'', 'he'));
+  if (by === 'channel') return [...arr].sort((a,b) => (a.channel||'').localeCompare(b.channel||'', 'he'));
+  return [...arr].sort((a,b) => new Date(b.publishedAt||0) - new Date(a.publishedAt||0));
+}
 </script>
 </body>
 </html>
